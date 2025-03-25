@@ -5,7 +5,7 @@
 // -----------------------------
 
 import * as vscode from 'vscode';
-import { parseByType } from '../parsers';
+import { parseByType } from '../parsers/index';
 import { Issue } from '../types/issue';
 
 export function lintDocument(document: vscode.TextDocument): Issue[] {

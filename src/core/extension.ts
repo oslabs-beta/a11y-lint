@@ -18,4 +18,6 @@ export function activate(context: vscode.ExtensionContext) {
       diagnostics.set(document.uri, result);
     })
   );
+
+  console.log('🥶 A11yLint is now active');
 }

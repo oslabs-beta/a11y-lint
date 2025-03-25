@@ -9,9 +9,14 @@ import { parseHTML } from './htmlParser';
 import { parseCSS } from './cssParser';
 
 export function parseByType(code: string, filePath: string) {
-  if (filePath.endsWith('.jsx') || filePath.endsWith('.tsx'))
+  if (filePath.endsWith('.jsx') || filePath.endsWith('.tsx')) {
     return parseJSX(code, filePath);
-  if (filePath.endsWith('.html')) return parseHTML(code, filePath);
-  if (filePath.endsWith('.css')) return parseCSS(code, filePath);
+  }
+  if (filePath.endsWith('.html')) {
+    return parseHTML(code, filePath);
+  }
+  if (filePath.endsWith('.css')) {
+    return parseCSS(code, filePath);
+  }
   return [];
 }
