@@ -6,6 +6,7 @@ import { cssRulesFromObject } from '../rules/cssRules';
 import { ParsedCSS } from '../types/css';
 import { Issue } from '../types/issue';
 
+// step 3 - parses code and calls the rules
 export function parseCSS(code: string, filePath: string): Issue[] {
   const parsed: ParsedCSS = {
     body: {

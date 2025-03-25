@@ -7,6 +7,7 @@
 import { Issue } from '../types/issue';
 import { CSSDeclaration, ParsedCSS } from '../types/css';
 
+// step 4- loops through the parsed CSS and applies our rules to them, if something fails, it creates an issue
 export function cssRulesFromObject(
   parsedCSS: ParsedCSS,
   file: string
