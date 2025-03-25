@@ -7,6 +7,9 @@
 export interface Issue {
   file: string;
   line: number;
+  column?: number;
+  endLine?: number;
+  endColumn?: number;
   message: string;
   severity?: 'warning' | 'error';
   fix?: string;
