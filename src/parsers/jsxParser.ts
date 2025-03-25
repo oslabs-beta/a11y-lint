@@ -22,9 +22,32 @@ const ast = parse(code, { plugins: ['jsx'] });
 // console.log(ast.body[0].expression.body.children[1].openingElement.attributes);
 // console.log(ast);
 
-let depth = 0;
-let prevNode;
-let results = [];
+type Node = {
+  type: String;
+  location: any;
+  attributes: Attribute[];
+};
+
+type Position = {
+  line: Number;
+  column: Number;
+  index: Number;
+};
+
+type Location = {
+  start: Position;
+  end: Position;
+  filename?: any;
+  identifierName?: any;
+};
+
+type Attribute = {
+  name: String;
+  value: String;
+};
+
+let prevNodeType: String = '';
+let results: Node[] = [];
 
 traverse(ast, {
   enter(path) {
@@ -34,12 +57,12 @@ traverse(ast, {
       // console.log('name: ' + path.node.name.name);
       // console.log('value: ' + path.node.value.value);
       results[results.length - 1].attributes.push({
-        name: path.node.name.name,
+        name: String(path.node.name.name),
         value: path.node.value.value,
       });
     } else if (
       path.node.type === 'JSXIdentifier' &&
-      prevNode.type !== 'JSXAttribute'
+      prevNodeType !== 'JSXAttribute'
     ) {
       // console.log(path.node.name);
       // console.log(path.node.loc);
@@ -55,13 +78,8 @@ traverse(ast, {
         value: path.node.value,
       });
     }
-    prevNode = path.node;
+    prevNodeType = path.node.type;
     console.log(results);
-    // depth++;
-  },
-  exit(path) {
-    depth--;
-    // console.log(`  exit ${path.type}(${path.key})`);
   },
 });
 
