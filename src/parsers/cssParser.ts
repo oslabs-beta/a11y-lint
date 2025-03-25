@@ -11,7 +11,7 @@ export function parseCSS(code: string, filePath: string): Issue[] {
     body: {
       'font-size': {
         value: '9px',
-        start: { line: 2, column: 2 }, // adjust this to match actual position of "font-size"
+        start: { line: 2, column: 2 },
         end: { line: 2, column: 18 },
       },
     },
