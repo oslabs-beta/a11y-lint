@@ -13,32 +13,21 @@ import traverse from '@babel/traverse';
 // let JSXParser = acorn.Parser.extend(jsx());
 // const ast = JSXParser.parse(code, { ecmaVersion: 'latest' });
 
-const code =
-  '()=>(<div><p>Hello world</p><img src="url" altId="an image"/></div>)';
-
-const ast = parse(code, { plugins: ['jsx'] });
-
 // console.log(ast.body[0].expression.body.openingElement.name.name);
 // console.log(ast.body[0].expression.body.children[1].openingElement.attributes);
 // console.log(ast);
 
 type Node = {
   type: String;
-  location: any;
+  location: Location;
   attributes: Attribute[];
 };
 
-type Position = {
-  line: Number;
-  column: Number;
-  index: Number;
-};
-
 type Location = {
-  start: Position;
-  end: Position;
-  filename?: any;
-  identifierName?: any;
+  lineStart: number;
+  lineEnd: number;
+  colStart: number;
+  colEnd: number;
 };
 
 type Attribute = {
@@ -49,6 +38,14 @@ type Attribute = {
 let prevNodeType: String = '';
 let results: Node[] = [];
 
+const code = `()=>(
+  <div>
+  <p>Hello world</p>
+  <img src="url" altId="an image"/>
+  </div>)`;
+
+const ast = parse(code, { plugins: ['jsx'] });
+
 traverse(ast, {
   enter(path) {
     // console.log(`enter ${path.type}(${path.key})`);
@@ -58,7 +55,7 @@ traverse(ast, {
       // console.log('value: ' + path.node.value.value);
       results[results.length - 1].attributes.push({
         name: String(path.node.name.name),
-        value: path.node.value.value,
+        value: path.node.value!.value,
       });
     } else if (
       path.node.type === 'JSXIdentifier' &&
@@ -68,10 +65,15 @@ traverse(ast, {
       // console.log(path.node.loc);
       results.push({
         type: path.node.name,
-        location: path.node.loc,
+        location: {
+          lineStart: Number(path.node.loc?.start.line),
+          lineEnd: Number(path.node.loc?.end.line),
+          colStart: Number(path.node.loc?.start.column),
+          colEnd: Number(path.node.loc?.end.column),
+        },
         attributes: [],
       });
-    } else if (path.node.type === 'JSXText') {
+    } else if (path.node.type === 'JSXText' && path.node.value !== '\n  ') {
       // console.log(path.node.value);
       results[results.length - 1].attributes.push({
         name: 'text',
