@@ -17,6 +17,7 @@ export function parseByType(code: string, filePath: string) {
     return parseHTML(code, filePath);
   }
   if (filePath.endsWith('.css')) {
+    console.log('parseByType function reached 🛁')
     return parseCSS(code, filePath);
   }
   return [];
