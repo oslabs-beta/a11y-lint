@@ -28,5 +28,5 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       }
     }
   }
-  return issues; // TODO: Check JSX AST nodes
+  return issues;
 }

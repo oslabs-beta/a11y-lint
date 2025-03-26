@@ -8,11 +8,11 @@ const fs = require('fs');
 //point to the html file
 const html = fs.readFileSync('../../index.html', 'utf-8');
 //pass the html file to the parser
-const document = parse5.parse(html, {sourceCodeLocationInfo:true})
+const document = parse5.parse(html, { sourceCodeLocationInfo: true });
 
-type HtmlExtractedNode= {
+type HtmlExtractedNode = {
   type: string;
-  attributes: Record<string, string>; 
+  attributes: Record<string, string>;
   location: {
     startLine: number;
     startCol: number;
@@ -56,4 +56,4 @@ const extractElements = (
 };
 
 const htmlElements = extractElements(document);
-console.log(htmlElements)
+console.log(htmlElements);
