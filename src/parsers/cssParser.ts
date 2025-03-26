@@ -2,8 +2,38 @@
 // FILE: src/parsers/cssParser.ts
 // DESCRIPTION: Uses PostCSS to parse CSS files and applies CSS-specific rules.
 // -----------------------------
+import * as vscode from 'vscode';
+import postcss from 'postcss';
+import { cssSelectorObj } from '../types/cssType';
+
 
 export function parseCSS(code: string, filePath: string) {
-  // TODO: Use postcss + cssRules
-  return [];
-}
+  const root = postcss.parse(code);
+  //empty object I will be storing information in
+  const outputObj: cssSelectorObj = {};
+  
+  //method walk Rules is built in method of postcss.  walk Rules in AST esetially goes to each node of a certain type which is "rules" and in this case rules are each tag (i.e. <button> <h1> <div>)
+  root.walkRules((rule) => {
+    //selecting the spefici tag so I can set it equal to th key of the object
+    const selector = rule.selector;
+    // console.log(selector)
+    //checking if the tag already exists in the object.  If it doesn't add it set it equal to a key with the value as an empty object
+    if (!outputObj[selector]) {
+      outputObj[selector] = {};
+      //console.log(outputObj)
+    }
+    //walkDecls is a method of postCSS that goes through each Declaration (attribute)
+    rule.walkDecls((decl) => {
+      //setting the key equal to the prop and the values are all the info we want
+      outputObj[selector][decl.prop] = {
+        value: decl.value,
+        startLine: decl.source!.start!.line,
+        startColumn: decl.source!.start!.column,
+        endLine: decl.source!.end!.line,
+        endColumn: decl.source!.end!.column,
+      };
+    });
+  });
+  return outputObj;
+};
+
