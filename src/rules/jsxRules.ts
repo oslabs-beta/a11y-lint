@@ -13,7 +13,7 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
     //if our node is an img tag
     if (parsedJsx[i].type === 'img') {
       //check if it has any attributes at all
-      if (!parsedJsx[i].attributes[0]) {
+      if (!parsedJsx[i].attributes.hasOwnProperty('altId')) {
         //if not, push a missing altId issue
         issues.push({
           file,
@@ -26,12 +26,7 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
           severity: 'warning',
         });
       }
-      else{
-        for (let j = 0; j < parsedJsx[i].attributes.length; j++){
-          
-        }
-      }
     }
   }
-  return []; // TODO: Check JSX AST nodes
+  return issues; // TODO: Check JSX AST nodes
 }

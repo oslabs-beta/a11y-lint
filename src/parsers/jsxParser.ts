@@ -20,7 +20,7 @@ import traverse from '@babel/traverse';
 type Node = {
   type: String;
   location: Location;
-  attributes: Attribute[];
+  attributes: Attribute;
 };
 
 type Location = {
@@ -30,9 +30,13 @@ type Location = {
   colEnd: number;
 };
 
+// type Attribute = {
+//   name: String;
+//   value: String;
+// };
+
 type Attribute = {
-  name: String;
-  value: String;
+  [k: string]: { value: String; location: Location };
 };
 
 let prevNodeType: String = '';
@@ -53,10 +57,22 @@ traverse(ast, {
     if (path.node.type === 'JSXAttribute') {
       // console.log('name: ' + path.node.name.name);
       // console.log('value: ' + path.node.value.value);
-      results[results.length - 1].attributes.push({
-        name: String(path.node.name.name),
-        value: path.node.value!.value,
-      });
+      // console.log(path.node.loc);
+      const name = String(path.node.name.name);
+      const value = String(path.node.value!.value);
+      // results[results.length - 1].attributes.push({
+      //   name: String(path.node.name.name),
+      //   value: path.node.value!.value,
+      // });
+      results[results.length - 1].attributes[name] = {
+        value: value,
+        location: {
+          lineStart: Number(path.node.loc?.start.line),
+          lineEnd: Number(path.node.loc?.end.line),
+          colStart: Number(path.node.loc?.start.column),
+          colEnd: Number(path.node.loc?.end.column),
+        },
+      };
     } else if (
       path.node.type === 'JSXIdentifier' &&
       prevNodeType !== 'JSXAttribute'
@@ -71,19 +87,33 @@ traverse(ast, {
           colStart: Number(path.node.loc?.start.column),
           colEnd: Number(path.node.loc?.end.column),
         },
-        attributes: [],
+        attributes: {},
       });
     } else if (path.node.type === 'JSXText' && path.node.value !== '\n  ') {
       // console.log(path.node.value);
-      results[results.length - 1].attributes.push({
-        name: 'text',
-        value: path.node.value,
-      });
+      const name = 'text';
+      const value = String(path.node.value);
+      results[results.length - 1].attributes[name] = {
+        value: value,
+        location: {
+          lineStart: Number(path.node.loc?.start.line),
+          lineEnd: Number(path.node.loc?.end.line),
+          colStart: Number(path.node.loc?.start.column),
+          colEnd: Number(path.node.loc?.end.column),
+        },
+      };
+      // results[results.length - 1].attributes.push({
+      //   name: 'text',
+      //   value: path.node.value,
+      // });
     }
     prevNodeType = path.node.type;
-    console.log(results);
+    // console.log(results);
   },
 });
+
+// console.log(results[3].attributes.hasOwnProperty('altId'));
+console.log(results);
 
 export function parseJSX(code: string, filePath: string) {
   // TODO: Use @babel/parser + jsxRules
