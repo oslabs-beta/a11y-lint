@@ -25,12 +25,11 @@ import * as vscode from 'vscode';
 import postcss from 'postcss';
 import { cssSelectorObj } from '../types/cssType';
 
-
 export function parseCSS(code: string, filePath: string) {
   const root = postcss.parse(code);
   //empty object I will be storing information in
   const outputObj: cssSelectorObj = {};
-  
+
   //method walk Rules is built in method of postcss.  walk Rules in AST esetially goes to each node of a certain type which is "rules" and in this case rules are each tag (i.e. <button> <h1> <div>)
   root.walkRules((rule) => {
     //selecting the spefici tag so I can set it equal to th key of the object
@@ -54,4 +53,4 @@ export function parseCSS(code: string, filePath: string) {
     });
   });
   return outputObj;
-};
+}

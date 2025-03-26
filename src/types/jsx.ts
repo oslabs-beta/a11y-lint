@@ -1,7 +1,7 @@
 type Node = {
   type: String;
   location: Location;
-  attributes: Attribute[];
+  attributes: Attribute;
 };
 
 type Location = {
@@ -12,8 +12,7 @@ type Location = {
 };
 
 type Attribute = {
-  name: String;
-  value: String;
+  [k: string]: { value: String; location: Location };
 };
 
 export { Node, Location, Attribute };
