@@ -112,7 +112,6 @@ traverse(ast, {
 // console.log(results[3].attributes.hasOwnProperty('altId'));
 console.log(results);
 
-
 export function parseJSX(code: string, filePath: string) {
   return [];
 }

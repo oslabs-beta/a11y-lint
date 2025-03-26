@@ -78,9 +78,9 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "postcss": "^8.5.3"
+    "postcss": "^8.5.3",
     "@babel/generator": "^7.27.0",
     "@babel/parser": "^7.27.0",
-    "@babel/traverse": "^7.27.0",
+    "@babel/traverse": "^7.27.0"
   }
 }
