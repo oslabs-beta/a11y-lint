@@ -10,11 +10,37 @@ import { Node } from '../types/jsx';
 import { jsxRules } from '../rules/jsxRules';
 import { Issue } from '../types/issue';
 
-// const code = `()=>(
+// const testCode = `()=>(
 //   <div>
 //   <p>Hello world</p>
-//   <img src="url" altId="an image"/>
+//   <img src="url"/>
 //   </div>)`;
+
+// console.log(parseJSX(testCode, ''));
+
+// export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
+//   const issues: Issue[] = [];
+//   for (let i = 0; i < parsedJsx.length; i++) {
+//     //if our node is an img tag
+//     if (parsedJsx[i].type === 'img') {
+//       //check if it has any attributes at all
+//       if (!parsedJsx[i].attributes.hasOwnProperty('altId')) {
+//         //if not, push a missing altId issue
+//         issues.push({
+//           file,
+//           line: parsedJsx[i].location.lineStart,
+//           column: parsedJsx[i].location.colStart,
+//           endLine: parsedJsx[i].location.lineEnd,
+//           endColumn: parsedJsx[i].location.colEnd,
+//           message: `Images should have alt ID.`,
+//           fix: 'Please add altId attribute. Decorative/nonfunctional images may use empty string as alt ID.',
+//           severity: 'warning',
+//         });
+//       }
+//     }
+//   }
+//   return issues; // TODO: Check JSX AST nodes
+// }
 
 // console.log(results[3].attributes.hasOwnProperty('altId'));
 
@@ -22,7 +48,6 @@ export function parseJSX(code: string, filePath: string): Issue[] {
   let prevNodeType: String = '';
   let results: Node[] = [];
   const ast = parse(code, { plugins: ['jsx'] });
-
   traverse(ast, {
     enter(path) {
       // console.log(`enter ${path.type}(${path.key})`);
