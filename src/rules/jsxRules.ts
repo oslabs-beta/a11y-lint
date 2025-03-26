@@ -13,7 +13,7 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
     //if our node is an img tag
     if (parsedJsx[i].type === 'img') {
       //check if it has any attributes at all
-      if (!parsedJsx[i].attributes.hasOwnProperty('altId')) {
+      if (!parsedJsx[i].attributes.hasOwnProperty('alt')) {
         //if not, push a missing altId issue
         issues.push({
           file,
@@ -22,7 +22,7 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
           endLine: parsedJsx[i].location.lineEnd,
           endColumn: parsedJsx[i].location.colEnd,
           message: `Images should have alt ID.`,
-          fix: 'Please add altId attribute. Decorative/nonfunctional images may use empty string as alt ID.',
+          fix: 'Please add "alt" attribute. Decorative/nonfunctional images may use empty string as alt ID.',
           severity: 'warning',
         });
       }

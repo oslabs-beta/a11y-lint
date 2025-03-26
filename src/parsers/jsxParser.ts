@@ -57,7 +57,7 @@ export function parseJSX(code: string, filePath: string): Issue[] {
         // console.log('value: ' + path.node.value.value);
         // console.log(path.node.loc);
         const name = String(path.node.name.name);
-        const value = String(path.node.value!.value);
+        const value = String(path.node.value!.value).toLowerCase();
         // results[results.length - 1].attributes.push({
         //   name: String(path.node.name.name),
         //   value: path.node.value!.value,
