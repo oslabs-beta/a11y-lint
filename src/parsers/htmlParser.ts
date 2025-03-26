@@ -22,8 +22,6 @@ type HtmlExtractedNode= {
   value?: string;
 };
 
-
-
 const extractElements = (
   node: any,
   output: HtmlExtractedNode[] = []
