@@ -1,4 +1,4 @@
-// -----------------------------
+// -----------------------------`
 // FILE: src/core/extension.ts
 // DESCRIPTION: Entry point for the VS Code extension. Registers the linter
 // and connects it to VS Code's diagnostics system when a file is saved.
@@ -9,6 +9,7 @@ import { lintDocument } from './linter';
 import { toDiagnostics } from './diagnostic';
 
 export function activate(context: vscode.ExtensionContext) {
+  vscode.window.showInformationMessage('🔥 A11YLint activated!');
   const diagnostics = vscode.languages.createDiagnosticCollection('a11ylint');
 
   // Step 1. think of it as an event listener - it is waiting for file saves
