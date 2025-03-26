@@ -6,32 +6,57 @@
   "engines": {
     "vscode": "^1.98.0"
   },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
   "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:css",
+    "onLanguage:html",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact"
+  ],
   "contributes": {
-    "commands": [
+    "languages": [
       {
-        "command": "A11yLint.helloWorld",
-        "title": "Hello World"
+        "id": "css",
+        "extensions": [
+          ".css"
+        ],
+        "aliases": [
+          "CSS"
+        ]
+      },
+      {
+        "id": "html",
+        "extensions": [
+          ".html"
+        ],
+        "aliases": [
+          "HTML"
+        ]
+      },
+      {
+        "id": "javascriptreact",
+        "extensions": [
+          ".jsx"
+        ],
+        "aliases": [
+          "JavaScript React"
+        ]
+      },
+      {
+        "id": "typescriptreact",
+        "extensions": [
+          ".tsx"
+        ],
+        "aliases": [
+          "TypeScript React"
+        ]
       }
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run package",
-    "compile": "npm run check-types && npm run lint && node esbuild.js",
-    "watch": "npm-run-all -p watch:*",
-    "watch:esbuild": "node esbuild.js --watch",
-    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "npm run check-types && npm run lint && node esbuild.js --production",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
-    "check-types": "tsc --noEmit",
-    "lint": "eslint src",
-    "test": "vscode-test"
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "node esbuild.js --production"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.26.9",
@@ -47,8 +72,6 @@
     "@typescript-eslint/parser": "^8.25.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
-    "esbuild": "^0.25.0",
-    "eslint": "^9.21.0",
     "esbuild": "^0.25.0",
     "eslint": "^9.21.0",
     "npm-run-all": "^4.1.5",

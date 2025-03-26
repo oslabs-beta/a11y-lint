@@ -3,10 +3,7 @@
 // DESCRIPTION: Uses Babel to parse JSX/TSX files and applies JSX-specific rules.
 // -----------------------------
 
-// import * as jsx from 'acorn-jsx';
-let jsx = require('acorn-jsx');
-import * as acorn from 'acorn';
-
+// step 3 - parses code and calls the rules
 import { parse } from '@babel/parser';
 import traverse from '@babel/traverse';
 
@@ -115,7 +112,7 @@ traverse(ast, {
 // console.log(results[3].attributes.hasOwnProperty('altId'));
 console.log(results);
 
+
 export function parseJSX(code: string, filePath: string) {
-  // TODO: Use @babel/parser + jsxRules
   return [];
 }
