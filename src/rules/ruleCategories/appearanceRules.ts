@@ -12,7 +12,6 @@ appearanceRules.textSize200 = (
     //get the value of the font size
     const value = declarations[decl].value.trim();
     let scalable: boolean = false;
-    5;
     //check if value ends with scalable unit
     if (value.endsWith('rem') || value.endsWith('em') || value.endsWith('%')) {
       scalable = true;
