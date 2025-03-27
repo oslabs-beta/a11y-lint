@@ -82,7 +82,9 @@
     "@babel/generator": "^7.27.0",
     "@babel/parser": "^7.27.0",
     "@babel/traverse": "^7.27.0",
+    "@types/tinycolor2": "^1.4.6",
     "parse5": "^7.2.1",
-    "postcss": "^8.5.3"
+    "postcss": "^8.5.3",
+    "tinycolor2": "^1.6.0"
   }
 }

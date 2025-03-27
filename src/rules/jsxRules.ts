@@ -16,7 +16,6 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       if (!parsedJsx[i].attributes.hasOwnProperty('altId')) {
         //if not, push a missing altId issue
         issues.push({
-          file,
           line: parsedJsx[i].location.lineStart,
           column: parsedJsx[i].location.colStart,
           endLine: parsedJsx[i].location.lineEnd,

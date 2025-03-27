@@ -5,7 +5,6 @@
 // -----------------------------
 
 export interface Issue {
-  file: string;
   line: number;
   column?: number;
   endLine?: number;

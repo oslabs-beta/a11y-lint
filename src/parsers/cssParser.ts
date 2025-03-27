@@ -23,12 +23,12 @@ export function parseCSS(code: string, filePath: string): Issue[] {
 */
 import * as vscode from 'vscode';
 import postcss from 'postcss';
-import { cssSelectorObj } from '../types/cssType';
+import { cssSelectorObj } from '../types/css';
 import { cssRulesFromObject } from '../rules/cssRules';
 import { Issue } from '../types/issue';
 
 export function parseCSS(code: string, filePath: string): Issue[] {
-  console.log('parseCSS fucntion reached 🥩')
+  console.log('parseCSS fucntion reached 🥩');
   const root = postcss.parse(code);
   //empty object I will be storing information in
   const outputObj: cssSelectorObj = {};
