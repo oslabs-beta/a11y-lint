@@ -18,7 +18,6 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       if (!parsedJsx[i].attributes.hasOwnProperty('alt')) {
         //if not, push a missing altId issue
         issues.push({
-          file,
           line: parsedJsx[i].location.lineStart,
           column: parsedJsx[i].location.colStart,
           endLine: parsedJsx[i].location.lineEnd,
@@ -30,11 +29,10 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       }
     } else if (
       parsedJsx[i].type === 'a' &&
-      !parsedJsx[i].attributes.hasOwnProperty('text') &&
+      !parsedJsx[i].value &&
       parsedJsx[i].attributes.hasOwnProperty('href')
     ) {
       issues.push({
-        file,
         line: parsedJsx[i].location.lineStart,
         column: parsedJsx[i].location.colStart - 1,
         endLine: parsedJsx[i].location.lineEnd,
@@ -50,7 +48,6 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       parsedJsx[i - 1].type !== 'label'
     ) {
       issues.push({
-        file,
         line: parsedJsx[i].location.lineStart,
         column: parsedJsx[i].location.colStart,
         endLine: parsedJsx[i].location.lineEnd,
@@ -67,7 +64,6 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       parsedJsx[i - 1].type !== 'tr'
     ) {
       issues.push({
-        file,
         line: parsedJsx[i].location.lineStart,
         column: parsedJsx[i].location.colStart,
         endLine: parsedJsx[i].location.lineEnd,

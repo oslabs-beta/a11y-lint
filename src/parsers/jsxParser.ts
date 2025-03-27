@@ -14,11 +14,12 @@ import { Issue } from '../types/issue';
 //   <div>
 //   <p>Hello world</p>
 //   <a href="url2"></a>
-//   <input type='text'>
+//   <input type='text'/>
 //   <table>
 //   <tr>
 //   <td>This is in my table</td>
 //   </tr>
+//   </table>
 //   <img src="url"/>
 //   </div>)`;
 
@@ -98,17 +99,17 @@ export function parseJSX(code: string, filePath: string): Issue[] {
         });
       } else if (path.node.type === 'JSXText' && path.node.value !== '\n  ') {
         // console.log(path.node.value);
-        const name = 'text';
-        const value = String(path.node.value);
-        results[results.length - 1].attributes[name] = {
-          value: value,
-          location: {
-            lineStart: Number(path.node.loc?.start.line),
-            lineEnd: Number(path.node.loc?.end.line),
-            colStart: Number(path.node.loc?.start.column),
-            colEnd: Number(path.node.loc?.end.column),
-          },
-        };
+        // const name = 'text';
+        results[results.length - 1].value = String(path.node.value);
+        // results[results.length - 1].attributes[name] = {
+        //   value: value,
+        //   location: {
+        //     lineStart: Number(path.node.loc?.start.line),
+        //     lineEnd: Number(path.node.loc?.end.line),
+        //     colStart: Number(path.node.loc?.start.column),
+        //     colEnd: Number(path.node.loc?.end.column),
+        //   },
+        // };
         // results[results.length - 1].attributes.push({
         //   name: 'text',
         //   value: path.node.value,

@@ -23,7 +23,7 @@ export function parseCSS(code: string, filePath: string): Issue[] {
 */
 import * as vscode from 'vscode';
 import postcss from 'postcss';
-import { cssSelectorObj } from '../types/cssType';
+import { cssSelectorObj } from '../types/css';
 import { cssRulesFromObject } from '../rules/cssRules';
 import { Issue } from '../types/issue';
 
