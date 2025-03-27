@@ -11,6 +11,12 @@ export function htmlRules(
 ): Issue[] {
   const issues: Issue[] = [];
 
+
+function checkForMissingAlt(node: HtmlExtractedNode) {
+
+  console.log(node)
+  
+ // TODO: Check HTML AST nodes
   function htmlRules(node) {
     if (!node.childNodes) return;
 
@@ -26,4 +32,6 @@ export function htmlRules(
   }
 
   return issues; // TODO: Check HTML AST nodes
+}
+return [] 
 }
