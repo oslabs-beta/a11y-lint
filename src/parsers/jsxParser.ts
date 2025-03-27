@@ -13,8 +13,16 @@ import { Issue } from '../types/issue';
 // const testCode = `()=>(
 //   <div>
 //   <p>Hello world</p>
+//   <a href="url2"></a>
+//   <input type='text'>
+//   <table>
+//   <tr>
+//   <td>This is in my table</td>
+//   </tr>
 //   <img src="url"/>
 //   </div>)`;
+
+// const parsedTest = parseJSX(testCode, '');
 
 // console.log(parseJSX(testCode, ''));
 
@@ -44,6 +52,7 @@ import { Issue } from '../types/issue';
 
 // console.log(results[3].attributes.hasOwnProperty('altId'));
 
+//TODO: need to differentiate between opening and closing JSX elements
 export function parseJSX(code: string, filePath: string): Issue[] {
   let prevNodeType: String = '';
   let results: Node[] = [];
