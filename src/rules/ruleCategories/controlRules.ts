@@ -1,4 +1,3 @@
-import { input } from '@testing-library/user-event/dist/cjs/event/input.js';
 import { Issue } from '../../types/issue';
 import { Node } from '../../types/jsx';
 
