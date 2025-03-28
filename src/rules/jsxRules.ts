@@ -29,6 +29,8 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       //checks if the previous node is a label for the input
       formRules.labelInputs(parsedJsx[i], parsedJsx[i - 1], issues);
       controlRules.useButtonTag(parsedJsx[i], issues);
+    } else if (parsedJsx[i].type === 'form') {
+      formRules.useFieldsetLegend(parsedJsx[i], parsedJsx[i + 1], issues);
     } else if (
       parsedJsx[i].type === 'table' &&
       parsedJsx[i - 1].type !== 'tr'
