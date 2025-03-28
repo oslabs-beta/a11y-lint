@@ -26,11 +26,6 @@ export function htmlRules(
         issues.push(issue);
       }
     }
-
-
   }
-
   return issues;
-
-return [] 
 }

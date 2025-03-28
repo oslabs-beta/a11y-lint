@@ -5,15 +5,16 @@
 // -----------------------------
 
 import { Issue } from '../types/issue';
-import { cssSelectorObj } from '../types/css';
-import tinycolor from 'tinycolor2';
+import { CssSelectorObj } from '../types/css';
 //inport rules
 import appearanceRules from './ruleCategories/appearanceRules';
 import contrastRules from './ruleCategories/contrastRules';
+import { Declaration } from 'postcss';
+import keyboardRules from './ruleCategories/keyboardRules';
 
 // step 4- loops through the parsed CSS and applies our rules to them, if something fails, it creates an issue
 export function cssRulesFromObject(
-  parsedCSS: cssSelectorObj,
+  parsedCSS: CssSelectorObj,
   file: string
 ): Issue[] {
   console.log('cssRules function reached ❄️');
@@ -23,19 +24,15 @@ export function cssRulesFromObject(
   console.log(parsedCSS);
   for (const selector in parsedCSS) {
     //grabbing each declaration
-    const declarations = parsedCSS[selector];
-
+    const declarations = parsedCSS[selector].declarations;
+    //checking for button border
+    contrastRules.checkButtonBorder(selector, parsedCSS[selector], issues);
     //checking for appropriate color contrast
     contrastRules.checkContrast(declarations, issues);
-
-    //then we loop through declarations
-    for (const decl in declarations) {
-      console.log('Decl: ', decl);
-
-      //must have 200% scalable font
-      appearanceRules.textSize200(declarations, decl, issues);
-    }
+    //must have 200% scalable font
+    appearanceRules.textSize200(declarations, issues);
+    //must have visible focus styles
+    keyboardRules.checkVisibleFocusStyle(selector, parsedCSS[selector], issues);
   }
-
   return issues;
 }
