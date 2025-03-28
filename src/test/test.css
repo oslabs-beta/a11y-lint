@@ -3,3 +3,7 @@ body {
   color: red;
   background-color: aqua;
 }
+
+button:focus {
+  outline: none;
+}
