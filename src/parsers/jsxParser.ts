@@ -10,18 +10,18 @@ import { Node } from '../types/jsx';
 import { jsxRules } from '../rules/jsxRules';
 import { Issue } from '../types/issue';
 
-// const testCode = `()=>(
-//   <div>
-//   <p>Hello world</p>
-//   <a href="url2"></a>
-//   <input type='text'/>
-//   <table>
-//   <tr>
-//   <td>This is in my table</td>
-//   </tr>
-//   </table>
-//   <img src="url"/>
-//   </div>)`;
+const testCode = `()=>(
+  <div>
+  <p>Hello world</p>
+  <a href="url2"></a>
+  <input type='text'/>
+  <table>
+  <tr>
+  <td>This is in my table</td>
+  </tr>
+  </table>
+  <img src="url"/>
+  </div>)`;
 
 // const parsedTest = parseJSX(testCode, '');
 
@@ -82,6 +82,7 @@ export function parseJSX(code: string, filePath: string): Issue[] {
           },
         };
       } else if (
+        //should we update this to just be JSXOpeningElement? do we want closing elements too?
         path.node.type === 'JSXIdentifier' &&
         prevNodeType !== 'JSXAttribute'
       ) {
@@ -97,7 +98,10 @@ export function parseJSX(code: string, filePath: string): Issue[] {
           },
           attributes: {},
         });
-      } else if (path.node.type === 'JSXText' && path.node.value !== '\n  ') {
+      } else if (
+        path.node.type === 'JSXText' &&
+        path.node.value.charAt(0) !== '\n'
+      ) {
         // console.log(path.node.value);
         // const name = 'text';
         results[results.length - 1].value = String(path.node.value);

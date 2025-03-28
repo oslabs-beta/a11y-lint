@@ -17,30 +17,31 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
   const issues: Issue[] = [];
   for (let i = 0; i < parsedJsx.length; i++) {
     //if our node is an img tag
-    if (parsedJsx[i].type === 'img'){
-    imageRules.hasAltText(parsedJsx[i], issues);
-  } else if (parsedJsx[i].type === 'a'){
-
-    controlRules.descriptiveLinks(parsedJsx[i], issues);
-
-  } else if (parsedJsx[i].type === 'input') {
-    //checks if the previous node is a label for the input
-      formRules.labelInputs(parsedJsx[i], parsedJsx[i-1], issues);
-    } else if (parsedJsx[i].type === 'table') {
-      // const temp: Node[] = [parsedJsx[i]];
-      // //traverses our parsedJsx to find the closing tag for the table
-      // let j = i+1;
-      // while (parsedJsx[j].type !== 'table' && j<parsedJsx.length){
-      //   temp.push(parsedJsx[j]);
-      // }
-      // console.log('temp: ', temp);
-
-      //makes sure that it isn't the closing table tag, 
+    if (parsedJsx[i].type === 'img') {
+      imageRules.hasAltText(parsedJsx[i], issues);
+    } else if (parsedJsx[i].type === 'a') {
+      controlRules.descriptiveLinks(parsedJsx[i], issues);
+    } else if (
+      parsedJsx[i].type === 'input' &&
+      parsedJsx[i - 1].type !== 'tr'
+    ) {
+      //checks if the previous node is a label for the input
+      formRules.labelInputs(parsedJsx[i], parsedJsx[i - 1], issues);
+    } else if (
+      parsedJsx[i].type === 'table' &&
+      parsedJsx[i - 1].type !== 'tr'
+    ) {
+      const parsedSlice: Node[] = [parsedJsx[i]];
+      //traverses our parsedJsx to find the closing tag for the table
+      let j = i + 1;
+      while (parsedJsx[j].type !== 'table' && j < parsedJsx.length) {
+        parsedSlice.push(parsedJsx[j]);
+      }
+      //makes sure that it isn't the closing table tag,
       // then checks if two nodes after there is a <th> tag
-      tableRules.hasHeaders(parsedJsx[i], parsedJsx[i - 1], parsedJsx[i + 2], issues);
+      // tableRules.hasHeaders(parsedJsx[i], parsedJsx[i - 1], parsedJsx[i + 2], issues);
+      tableRules.hasHeadersBetter(parsedSlice, issues);
     }
   }
   return issues;
 }
-
-
