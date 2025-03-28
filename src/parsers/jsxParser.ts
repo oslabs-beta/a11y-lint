@@ -83,8 +83,8 @@ export function parseJSX(code: string, filePath: string): Issue[] {
         };
       } else if (
         //should we update this to just be JSXOpeningElement? do we want closing elements too?
-        path.node.type === 'JSXIdentifier' &&
-        prevNodeType !== 'JSXAttribute'
+        path.node.type === 'JSXOpeningElement' ||
+        path.node.type === 'JSXClosingElement'
       ) {
         // console.log(path.node.name);
         // console.log(path.node.loc);
