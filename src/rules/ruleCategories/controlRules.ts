@@ -5,7 +5,6 @@ import { Node } from '../../types/jsx';
 const controlRules: { [key: string]: Function } = {};
 
 controlRules.descriptiveLinks = (parsedJsx: Node, issues: Issue[]): Issue[] => {
-  console.log(parsedJsx);
   if (
     parsedJsx.type === 'a' &&
     !parsedJsx.value &&

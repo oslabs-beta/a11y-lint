@@ -32,8 +32,9 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       const parsedSlice: Node[] = [parsedJsx[i]];
       //traverses our parsedJsx to find the closing tag for the table
       let j = i + 1;
-      while (parsedJsx[j].type !== 'table' && j < parsedJsx.length) {
+      while (parsedJsx[j].type !== 'table' && j < parsedJsx.length - 1) {
         parsedSlice.push(parsedJsx[j]);
+        j++;
       }
       //makes sure that it isn't the closing table tag,
       // then checks if two nodes after there is a <th> tag
