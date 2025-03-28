@@ -6,7 +6,6 @@
 
 import { Issue } from '../types/issue';
 import { CssSelectorObj } from '../types/css';
-import tinycolor from 'tinycolor2';
 //inport rules
 import appearanceRules from './ruleCategories/appearanceRules';
 import contrastRules from './ruleCategories/contrastRules';
@@ -26,9 +25,11 @@ export function cssRulesFromObject(
   for (const selector in parsedCSS) {
     //grabbing each declaration
     const declarations = parsedCSS[selector].declarations;
+    //checking for button border
+    contrastRules.checkButtonBorder(selector, parsedCSS[selector], issues);
     //checking for appropriate color contrast
     contrastRules.checkContrast(declarations, issues);
-    // //must have 200% scalable font
+    //must have 200% scalable font
     appearanceRules.textSize200(declarations, issues);
     //must have visible focus styles
     keyboardRules.checkVisibleFocusStyle(selector, parsedCSS[selector], issues);
