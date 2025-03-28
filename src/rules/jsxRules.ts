@@ -21,12 +21,10 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       imageRules.hasAltText(parsedJsx[i], issues);
     } else if (parsedJsx[i].type === 'a') {
       controlRules.descriptiveLinks(parsedJsx[i], issues);
-    } else if (
-      parsedJsx[i].type === 'input' &&
-      parsedJsx[i - 1].type !== 'tr'
-    ) {
+    } else if (parsedJsx[i].type === 'input') {
       //checks if the previous node is a label for the input
       formRules.labelInputs(parsedJsx[i], parsedJsx[i - 1], issues);
+      controlRules.useButtonTag(parsedJsx[i], issues);
     } else if (
       parsedJsx[i].type === 'table' &&
       parsedJsx[i - 1].type !== 'tr'
@@ -41,6 +39,7 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       // then checks if two nodes after there is a <th> tag
       // tableRules.hasHeaders(parsedJsx[i], parsedJsx[i - 1], parsedJsx[i + 2], issues);
       tableRules.hasHeadersBetter(parsedSlice, issues);
+      tableRules.usesCaption(parsedSlice, issues);
     }
   }
   return issues;
