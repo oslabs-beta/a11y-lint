@@ -11,6 +11,7 @@ import tinycolor from 'tinycolor2';
 import appearanceRules from './ruleCategories/appearanceRules';
 import contrastRules from './ruleCategories/contrastRules';
 import { Declaration } from 'postcss';
+import keyboardRules from './ruleCategories/keyboardRules';
 
 // step 4- loops through the parsed CSS and applies our rules to them, if something fails, it creates an issue
 export function cssRulesFromObject(
@@ -29,11 +30,8 @@ export function cssRulesFromObject(
     contrastRules.checkContrast(declarations, issues);
     // //must have 200% scalable font
     appearanceRules.textSize200(declarations, issues);
-    //then we loop through declarations
-    for (const declaration in declarations) {
-      console.log('Decl: ', declaration);
-    }
+    //must have visible focus styles
+    keyboardRules.checkVisibleFocusStyle(selector, parsedCSS[selector], issues);
   }
-  5;
   return issues;
 }
