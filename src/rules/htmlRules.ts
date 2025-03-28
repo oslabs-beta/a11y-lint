@@ -24,4 +24,26 @@ import { HtmlExtractedNode } from '../types/html';
 //   }
 // }
 
-  // return issues; // TODO: Check HTML AST nodes
+function checkForMissingAlt(node: HtmlExtractedNode) {
+
+  console.log(node)
+  
+ // TODO: Check HTML AST nodes
+  function htmlRules(node) {
+    if (!node.childNodes) return;
+
+    for (const child of node.childNodes) {
+      if (child.tagName === 'img') {
+        const hasAlt = child.attrs.some((attr) => attr.name === 'alt');
+        if (!hasAlt) {
+          console.warn(`❗ <img> tag is missing alt attribute`);
+        }
+      }
+      checkForMissingAlt(child); // Recurse
+    }
+  }
+
+  return issues; // TODO: Check HTML AST nodes
+}
+return [] 
+}

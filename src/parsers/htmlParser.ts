@@ -16,23 +16,57 @@ export function parseHTML(code: string, filePath: string): Issue[] {
   ): HtmlExtractedNode[] => {
     const cache: Partial<HtmlExtractedNode> = {};
 
-    if (node.tagName) {
-      cache.type = node.tagName;
-      cache.attributes = node.attrs || {};
-      cache.location = {
-        startLine: node.sourceCodeLocation.startLine,
-        startCol: node.sourceCodeLocation.startCol,
-        endLine: node.sourceCodeLocation.endLine,
-        endCol: node.sourceCodeLocation.endCol,
-      };
-    }
+  if (node.tagName) {
+    cache.type = node.tagName;
 
-    if (node.childNodes) {
-      for (const child of node.childNodes) {
-        if (child.value) {
-          cache.value = child.value;
-        }
-        extractElements(child, output);
+
+    
+    // Get attribute values as a key-value pair
+    const attributes:{
+      [k: string]: { value: String;   location?: {
+        startLine: number;
+        startCol: number;
+        endLine: number;
+        endCol: number;
+      };};
+    } = {};
+    
+    if (Array.isArray(node.attrs)) {
+      for (const attr of node.attrs) {
+        attributes[attr.name] = { value: attr.value };
+      }
+    }
+    cache.attributes = attributes;
+
+    // ✅ Extract attribute locations
+    const attrLocations = {};
+    const attrLocs = node.sourceCodeLocation?.attrs;
+    if (attrLocs) {
+      for (const attrName in attrLocs) {
+        attributes[attrName].location = {
+            startLine: attrLocs[attrName].startLine,
+            startCol: attrLocs[attrName].startCol,
+            endLine: attrLocs[attrName].endLine,
+            endCol: attrLocs[attrName].endCol,
+        };
+      }
+    }
+    // cache.attributeLocations = attrLocations;
+
+    // Element location
+    cache.location = {
+      startLine: node.sourceCodeLocation.startLine,
+      startCol: node.sourceCodeLocation.startCol,
+      endLine: node.sourceCodeLocation.endLine,
+      endCol: node.sourceCodeLocation.endCol,
+    };
+  }
+
+  // Handle children
+  if (node.childNodes) {
+    for (const child of node.childNodes) {
+      if (child.value) {
+        cache.value = child.value;
       }
     }
 

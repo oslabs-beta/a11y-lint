@@ -9,18 +9,21 @@ appearanceRules.textSize200 = (
   issues: Issue[]
 ) => {
   if (decl === 'font-size') {
-    console.log('you are in if statement 🧛‍♂️');
     //get the value of the font size
-    const numericValue = parseInt(declarations[decl].value);
-    console.log(numericValue);
-    if (numericValue < 16) {
+    const value = declarations[decl].value.trim();
+    let scalable: boolean = false;
+    //check if value ends with scalable unit
+    if (value.endsWith('rem') || value.endsWith('em') || value.endsWith('%')) {
+      scalable = true;
+    }
+    if (!scalable) {
       issues.push({
         line: declarations[decl].startLine,
         column: declarations[decl].startColumn,
         endLine: declarations[decl].endLine,
         endColumn: declarations[decl].endColumn,
-        message: `Font size of ${numericValue}px is too small for readability.`,
-        fix: 'Use at least 16px font size for body text.',
+        message: `Font size "${value}" is not scalable.`,
+        fix: 'Use rem, em, or % instead of a fixed unit like px',
         severity: 'warning',
       });
     }
