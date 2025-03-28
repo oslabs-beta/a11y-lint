@@ -2,6 +2,7 @@ type Node = {
   type: String;
   location: Location;
   attributes: Attribute;
+  value?: String
 };
 
 type Location = {
