@@ -23,7 +23,7 @@ export function parseCSS(code: string, filePath: string): Issue[] {
 */
 import * as vscode from 'vscode';
 import postcss from 'postcss';
-import { cssSelectorObj } from '../types/css';
+import { CssSelectorObj } from '../types/css';
 import { cssRulesFromObject } from '../rules/cssRules';
 import { Issue } from '../types/issue';
 
@@ -31,7 +31,7 @@ export function parseCSS(code: string, filePath: string): Issue[] {
   console.log('parseCSS fucntion reached 🥩');
   const root = postcss.parse(code);
   //empty object I will be storing information in
-  const outputObj: cssSelectorObj = {};
+  const outputObj: CssSelectorObj = {};
 
   //method walk Rules is built in method of postcss.  walk Rules in AST esetially goes to each node of a certain type which is "rules" and in this case rules are each tag (i.e. <button> <h1> <div>)
   root.walkRules((rule) => {
@@ -40,13 +40,19 @@ export function parseCSS(code: string, filePath: string): Issue[] {
     // console.log(selector)
     //checking if the tag already exists in the object.  If it doesn't add it set it equal to a key with the value as an empty object
     if (!outputObj[selector]) {
-      outputObj[selector] = {};
-      //console.log(outputObj)
+      outputObj[selector] = {
+        declarations: {},
+        startLine: rule.source!.start!.line,
+        startColumn: rule.source!.start!.column,
+        endLine: rule.source!.end!.line,
+        endColumn: rule.source!.end!.column,
+      };
     }
+    //console.log(outputObj)
     //walkDecls is a method of postCSS that goes through each Declaration (attribute)
     rule.walkDecls((decl) => {
       //setting the key equal to the prop and the values are all the info we want
-      outputObj[selector][decl.prop] = {
+      outputObj[selector].declarations[decl.prop] = {
         value: decl.value,
         startLine: decl.source!.start!.line,
         startColumn: decl.source!.start!.column,
@@ -55,6 +61,6 @@ export function parseCSS(code: string, filePath: string): Issue[] {
       };
     });
   });
-  console.log(outputObj);
+  console.log('output:', outputObj);
   return cssRulesFromObject(outputObj, filePath);
 }

@@ -1,10 +1,10 @@
-import { cssSelectorObj, declarations } from '../../types/css';
+import { CssSelectorObj, Declarations } from '../../types/css';
 import { Issue } from '../../types/issue';
 import tinycolor from 'tinycolor2';
 
 const contrastRules: { [key: string]: Function } = {};
 
-contrastRules.checkContrast = (declarations: declarations, issues: Issue[]) => {
+contrastRules.checkContrast = (declarations: Declarations, issues: Issue[]) => {
   if (declarations['color'] && declarations['background-color']) {
     console.log('you are in contrast if statement 🍣');
     let color = tinycolor(declarations['color'].value);
