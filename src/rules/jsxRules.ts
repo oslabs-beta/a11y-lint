@@ -16,6 +16,10 @@ import tableRules from './ruleCategories/tableRules';
 export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
   const issues: Issue[] = [];
   for (let i = 0; i < parsedJsx.length; i++) {
+    //want to test all nodes for links EXCEPT <a> tags
+    if (parsedJsx[i].type !== 'a') {
+      controlRules.useATag(parsedJsx[i], issues);
+    }
     //if our node is an img tag
     if (parsedJsx[i].type === 'img') {
       imageRules.hasAltText(parsedJsx[i], issues);
