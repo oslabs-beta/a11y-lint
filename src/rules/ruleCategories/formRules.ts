@@ -23,4 +23,24 @@ formRules.labelInputs = (
   return issues;
 };
 
+formRules.useFieldsetLegend = (
+  parsedJsx: Node,
+  nextNode: Node,
+  issues: Issue[]
+): Issue[] => {
+  if (nextNode.type !== 'fieldset') {
+    issues.push({
+      line: parsedJsx.location.lineStart,
+      column: parsedJsx.location.colStart,
+      endLine: parsedJsx.location.lineEnd,
+      endColumn: parsedJsx.location.colEnd,
+      message: `Consider using <fieldset> and <legend> tags.`,
+      fix: 'If suitable, a <fieldset> can be used to group form items and a <legend> tag used to label them.',
+      severity: 'hint',
+    });
+  }
+
+  return issues;
+};
+
 export default formRules;
