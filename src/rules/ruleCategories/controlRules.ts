@@ -7,9 +7,9 @@ controlRules.descriptiveLinks = (parsedJsx: Node, issues: Issue[]): Issue[] => {
   if (!parsedJsx.value && parsedJsx.attributes.hasOwnProperty('href')) {
     issues.push({
       line: parsedJsx.location.lineStart,
-      column: parsedJsx.location.colStart - 1,
+      column: parsedJsx.location.colStart,
       endLine: parsedJsx.location.lineEnd,
-      endColumn: parsedJsx.location.colEnd + 1,
+      endColumn: parsedJsx.location.colEnd,
       message: `Links should have clear descriptive text.`,
       fix: 'Please add text between <a> tags that describes the purpose of link.',
       severity: 'warning',
