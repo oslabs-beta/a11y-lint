@@ -16,17 +16,26 @@ import tableRules from './ruleCategories/tableRules';
 export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
   const issues: Issue[] = [];
   for (let i = 0; i < parsedJsx.length; i++) {
+    //want to test all nodes for links EXCEPT <a> tags
+    if (parsedJsx[i].type !== 'a') {
+      controlRules.useATag(parsedJsx[i], issues);
+    }
     //if our node is an img tag
     if (parsedJsx[i].type === 'img') {
       imageRules.hasAltText(parsedJsx[i], issues);
     } else if (parsedJsx[i].type === 'a') {
       controlRules.descriptiveLinks(parsedJsx[i], issues);
-    } else if (
-      parsedJsx[i].type === 'input' &&
-      parsedJsx[i - 1].type !== 'tr'
-    ) {
+    } else if (parsedJsx[i].type === 'input') {
       //checks if the previous node is a label for the input
       formRules.labelInputs(parsedJsx[i], parsedJsx[i - 1], issues);
+      controlRules.useButtonTag(parsedJsx[i], issues);
+    } else if (parsedJsx[i].type === 'form') {
+      formRules.useFieldsetLegend(
+        parsedJsx[i],
+        parsedJsx[i + 1],
+        parsedJsx[i - 1],
+        issues
+      );
     } else if (
       parsedJsx[i].type === 'table' &&
       parsedJsx[i - 1].type !== 'tr'
@@ -34,13 +43,15 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       const parsedSlice: Node[] = [parsedJsx[i]];
       //traverses our parsedJsx to find the closing tag for the table
       let j = i + 1;
-      while (parsedJsx[j].type !== 'table' && j < parsedJsx.length) {
+      while (parsedJsx[j].type !== 'table' && j < parsedJsx.length - 1) {
         parsedSlice.push(parsedJsx[j]);
+        j++;
       }
       //makes sure that it isn't the closing table tag,
       // then checks if two nodes after there is a <th> tag
       // tableRules.hasHeaders(parsedJsx[i], parsedJsx[i - 1], parsedJsx[i + 2], issues);
       tableRules.hasHeadersBetter(parsedSlice, issues);
+      tableRules.usesCaption(parsedSlice, issues);
     }
   }
   return issues;

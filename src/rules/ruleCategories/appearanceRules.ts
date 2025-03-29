@@ -3,7 +3,10 @@ import { Issue } from '../../types/issue';
 
 const appearanceRules: { [key: string]: Function } = {};
 
-appearanceRules.textSize200 = (declarations: Declarations, issues: Issue[]) => {
+appearanceRules.textSize200 = (
+  declarations: Declarations,
+  issues: Issue[]
+): Issue[] => {
   if (declarations['font-size']) {
     //get the value of the font size
     const value = declarations['font-size'].value.trim();

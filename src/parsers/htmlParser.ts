@@ -1,14 +1,12 @@
-import { parse } from "parse5";
-import { htmlRules } from "../rules/htmlRules";
-import { Issue } from "../types/issue";
-import { HtmlExtractedNode } from "../types/html";
-
+import { parse } from 'parse5';
+import { htmlRules } from '../rules/htmlRules';
+import { Issue } from '../types/issue';
+import { HtmlExtractedNode } from '../types/html';
 // -----------------------------
 // Parses HTML string, extracts elements, applies rules
 // -----------------------------
 export function parseHTML(code: string, filePath: string): Issue[] {
   const document = parse(code, { sourceCodeLocationInfo: true });
-
   const extractElements = (
     node: any,
     output: HtmlExtractedNode[] = []
@@ -29,7 +27,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
           };
         };
       } = {};
-
+      
       if (Array.isArray(node.attrs)) {
         for (const attr of node.attrs) {
           attributes[attr.name] = { value: attr.value };
@@ -69,11 +67,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
         extractElements(child, output);
       }
     }
-
     if (Object.keys(cache).length > 1) {
       output.push(cache as HtmlExtractedNode);
     }
-
     return output;
   };
 
