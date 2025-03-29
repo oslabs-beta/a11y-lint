@@ -12,8 +12,10 @@ export function parseHTML(code: string, filePath: string): Issue[] {
     output: HtmlExtractedNode[] = []
   ): HtmlExtractedNode[] => {
     const cache: Partial<HtmlExtractedNode> = {};
+
     if (node.tagName) {
       cache.type = node.tagName;
+
       const attributes: {
         [k: string]: {
           value: string;
@@ -25,11 +27,13 @@ export function parseHTML(code: string, filePath: string): Issue[] {
           };
         };
       } = {};
+      
       if (Array.isArray(node.attrs)) {
         for (const attr of node.attrs) {
           attributes[attr.name] = { value: attr.value };
         }
       }
+
       const attrLocs = node.sourceCodeLocation?.attrs;
       if (attrLocs) {
         for (const attrName in attrLocs) {
@@ -43,7 +47,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
           }
         }
       }
+
       cache.attributes = attributes;
+
       cache.location = {
         startLine: node.sourceCodeLocation.startLine,
         startCol: node.sourceCodeLocation.startCol,
@@ -51,6 +57,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
         endCol: node.sourceCodeLocation.endCol,
       };
     }
+
     // Recursively visit child nodes
     if (node.childNodes) {
       for (const child of node.childNodes) {
@@ -65,6 +72,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
     }
     return output;
   };
+
   const htmlElements = extractElements(document);
   return htmlRules(htmlElements, filePath);
 }
