@@ -30,7 +30,12 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       formRules.labelInputs(parsedJsx[i], parsedJsx[i - 1], issues);
       controlRules.useButtonTag(parsedJsx[i], issues);
     } else if (parsedJsx[i].type === 'form') {
-      formRules.useFieldsetLegend(parsedJsx[i], parsedJsx[i + 1], issues);
+      formRules.useFieldsetLegend(
+        parsedJsx[i],
+        parsedJsx[i + 1],
+        parsedJsx[i - 1],
+        issues
+      );
     } else if (
       parsedJsx[i].type === 'table' &&
       parsedJsx[i - 1].type !== 'tr'

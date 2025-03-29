@@ -63,7 +63,7 @@ export function parseJSX(code: string, filePath: string): Issue[] {
         // console.log(path.node.name);
         // console.log(path.node.loc);
         results.push({
-          type: path.node.name,
+          type: path.node.name.name,
           location: {
             lineStart: Number(path.node.loc?.start.line),
             lineEnd: Number(path.node.loc?.end.line),

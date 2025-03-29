@@ -10,6 +10,6 @@ export interface Issue {
   endLine?: number;
   endColumn?: number;
   message: string;
-  severity?: 'warning' | 'error' | 'hint';
+  severity?: 'warning' | 'error' | 'information';
   fix?: string;
 }
