@@ -10,18 +10,18 @@ import { Node } from '../types/jsx';
 import { jsxRules } from '../rules/jsxRules';
 import { Issue } from '../types/issue';
 
-const testCode = `()=>(
-  <div>
-  <p>Hello world</p>
-  <a href="url2"></a>
-  <input type='text'/>
-  <table>
-  <tr>
-  <td>This is in my table</td>
-  </tr>
-  </table>
-  <img src="url"/>
-  </div>)`;
+// const testCode = `()=>(
+//   <div>
+//   <p>Hello world</p>
+//   <a href="url2"></a>
+//   <input type='text'/>
+//   <table>
+//   <tr>
+//   <td>This is in my table</td>
+//   </tr>
+//   </table>
+//   <img src="url"/>
+//   </div>)`;
 
 // const parsedTest = parseJSX(testCode, '');
 
@@ -60,10 +60,10 @@ export function parseJSX(code: string, filePath: string): Issue[] {
         path.node.type === 'JSXOpeningElement' ||
         path.node.type === 'JSXClosingElement'
       ) {
-        // console.log(path.node.name);
+        console.log('PathNodeName: ', path.node.name);
         // console.log(path.node.loc);
         results.push({
-          type: path.node.name,
+          type: path.node.name.name,
           location: {
             lineStart: Number(path.node.loc?.start.line),
             lineEnd: Number(path.node.loc?.end.line),

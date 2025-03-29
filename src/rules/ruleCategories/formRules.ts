@@ -36,7 +36,7 @@ formRules.useFieldsetLegend = (
       endColumn: parsedJsx.location.colEnd,
       message: `Consider using <fieldset> and <legend> tags.`,
       fix: 'If suitable, a <fieldset> can be used to group form items and a <legend> tag used to label them.',
-      severity: 'hint',
+      severity: 'info',
     });
   }
 

@@ -17,24 +17,30 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
   const issues: Issue[] = [];
   for (let i = 0; i < parsedJsx.length; i++) {
     //want to test all nodes for links EXCEPT <a> tags
-    if (parsedJsx[i].type !== 'a') {
-      controlRules.useATag(parsedJsx[i], issues);
-    }
+    // if (parsedJsx[i].type !== 'a') {
+    //   console.log('inside not a tag!');
+    //   controlRules.useATag(parsedJsx[i], issues);
+    // }
     //if our node is an img tag
     if (parsedJsx[i].type === 'img') {
+      console.log('checking if img tag!');
       imageRules.hasAltText(parsedJsx[i], issues);
     } else if (parsedJsx[i].type === 'a') {
+      console.log('checking if a tag!');
       controlRules.descriptiveLinks(parsedJsx[i], issues);
     } else if (parsedJsx[i].type === 'input') {
       //checks if the previous node is a label for the input
+      console.log('checking if input tag!');
       formRules.labelInputs(parsedJsx[i], parsedJsx[i - 1], issues);
       controlRules.useButtonTag(parsedJsx[i], issues);
     } else if (parsedJsx[i].type === 'form') {
+      console.log('checking if form tag!');
       formRules.useFieldsetLegend(parsedJsx[i], parsedJsx[i + 1], issues);
     } else if (
       parsedJsx[i].type === 'table' &&
       parsedJsx[i - 1].type !== 'tr'
     ) {
+      console.log('checking if table tag!');
       const parsedSlice: Node[] = [parsedJsx[i]];
       //traverses our parsedJsx to find the closing tag for the table
       let j = i + 1;
