@@ -62,6 +62,28 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
     }
     return null;
   },
+
+  //ensure that viewport zoom is not disabled
+  resizeTextRules: (node) => {
+    if (node.type === 'meta' && node.attributes?.name?.value === 'viewport') {
+      const content = node.attributes?.content.value || '';
+      if (
+        content.includes('maximum-scale=1') ||
+        content.includes('user-scalable=no')
+      ) {
+        return {
+          line: node.location?.startLine || 0,
+          column: node.location?.startCol,
+          endline: node.location?.endLine || 0,
+          endColumn: node.location?.endCol,
+          message: `Avoid disabling zoom. Users may need to resize text.`,
+          severity: 'warning',
+          fix: `Remove maximum-scale=1 and user-scalable=no`,
+        };
+      }
+    }
+    return null;
+  },
 };
 
 export default globalCodeRules;
