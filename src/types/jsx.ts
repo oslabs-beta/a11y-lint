@@ -1,8 +1,11 @@
+import { CssSelectorObj } from './css';
+
 type Node = {
   type: String;
   location: Location;
   attributes: Attribute;
-  value?: String
+  value?: String;
+  styles?: CssSelectorObj;
 };
 
 type Location = {

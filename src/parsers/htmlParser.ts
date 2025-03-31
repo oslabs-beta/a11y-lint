@@ -2,6 +2,7 @@ import { parse } from 'parse5';
 import { htmlRules } from '../rules/htmlRules';
 import { Issue } from '../types/issue';
 import { HtmlExtractedNode } from '../types/html';
+import { Declarations, CssSelectorObj } from '../types/css';
 // -----------------------------
 // Parses HTML string, extracts elements, applies rules
 // -----------------------------
@@ -27,10 +28,42 @@ export function parseHTML(code: string, filePath: string): Issue[] {
           };
         };
       } = {};
-      
+
       if (Array.isArray(node.attrs)) {
         for (const attr of node.attrs) {
-          attributes[attr.name] = { value: attr.value };
+          if (attr.name !== 'style') {
+            attributes[attr.name] = { value: attr.value };
+          } else {
+            const name: string = attr.name;
+            const value: string = attr.value;
+
+            let values: String[] = value.split(';');
+            let declarations: Declarations = {};
+            let addLineStart: number = 0;
+            const selector = node.tag;
+            const selectorLocation = node.sourceCodeLocation;
+            const location = node.sourceCodeLocation?.attrs['style'];
+            for (let i = 0; i < values.length - 1; i++) {
+              const decPair: string[] = values[i].trim().split(':');
+              const addLineEnd: number = decPair[0].length + decPair[1].length;
+              declarations[decPair[0]] = {
+                value: decPair[1],
+                startLine: location?.startLine + addLineStart,
+                endLine: location?.endLine + addLineEnd,
+                startColumn: location?.startCol,
+                endColumn: location?.endCol,
+              };
+              addLineStart += addLineEnd + 1;
+            }
+            cache.styles = {};
+            cache.styles![selector] = {
+              declarations: declarations,
+              startLine: selectorLocation.lineStart,
+              endLine: selectorLocation.lineEnd,
+              startColumn: selectorLocation.colStart,
+              endColumn: selectorLocation.colEnd,
+            };
+          }
         }
       }
 
