@@ -82,7 +82,6 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
         };
       }
     }
-
     return null;
   },
 };
