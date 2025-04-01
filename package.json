@@ -3,8 +3,13 @@
   "displayName": "a11ylint",
   "description": "Accessibility linter for VS Code",
   "version": "0.0.1",
+  "publisher": "A11yLint",
   "engines": {
     "vscode": "^1.98.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oslabs-beta/a11y-lint.git"
   },
   "main": "./dist/extension.js",
   "activationEvents": [
