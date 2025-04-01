@@ -48,10 +48,10 @@ export function parseHTML(code: string, filePath: string): Issue[] {
               const addLineEnd: number = decPair[0].length + decPair[1].length;
               declarations[decPair[0]] = {
                 value: decPair[1],
-                startLine: location?.startLine + addLineStart,
-                endLine: location?.endLine + addLineEnd,
-                startColumn: location?.startCol,
-                endColumn: location?.endCol,
+                startLine: location?.startLine,
+                endLine: location?.endLine,
+                startColumn: location?.startCol + addLineStart,
+                endColumn: location?.endCol + addLineEnd,
               };
               addLineStart += addLineEnd + 1;
             }
