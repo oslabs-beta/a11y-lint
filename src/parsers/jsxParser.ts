@@ -57,7 +57,7 @@ export function parseJSX(code: string, filePath: string): Issue[] {
         } else {
           let values: String[] = value.split(';');
           let declarations: Declarations = {};
-          let addLineStart: number = 0;
+          let addLineStart: number = 8;
           const selector: string = String(results[results.length - 1].type);
           const selectorLocation = results[results.length - 1].location;
           const location = path.node.loc;
@@ -69,9 +69,9 @@ export function parseJSX(code: string, filePath: string): Issue[] {
               startLine: location?.start.line!,
               endLine: location?.end.line!,
               startColumn: location?.start.column! + addLineStart,
-              endColumn: location?.end.column! + addLineEnd,
+              endColumn: location?.start.column! + addLineStart + addLineEnd,
             };
-            addLineStart += addLineEnd + 1;
+            addLineStart += addLineEnd + 3;
           }
           results[results.length - 1].styles = {};
           results[results.length - 1].styles![selector] = {
@@ -94,7 +94,7 @@ export function parseJSX(code: string, filePath: string): Issue[] {
           location: {
             lineStart: Number(path.node.loc?.start.line),
             lineEnd: Number(path.node.loc?.end.line),
-            colStart: Number(path.node.loc?.start.column),
+            colStart: Number(path.node.loc?.start.column) + 1,
             colEnd: Number(path.node.loc?.end.column),
           },
           attributes: {},

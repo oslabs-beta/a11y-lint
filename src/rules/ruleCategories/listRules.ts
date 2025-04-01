@@ -5,14 +5,17 @@ const listRules: { [key: string]: Function } = {};
 
 listRules.useListElements = (
   node: Node,
-  prevNode: Node,
-  nextNode: Node,
+  prevVal: string,
+  nextVal: string,
   issues: Issue[]
 ): Issue[] => {
+  console.log('here we are in listRules');
   const charOne = node.value?.charAt(0);
-  const nextCharOne = nextNode.value?.charAt(0);
-  const prevCharOne = prevNode.value?.charAt(0);
-
+  // const next = nextNode.value || ' '
+  // const prev = prevNode.value || ' '
+  const nextCharOne = nextVal.charAt(0);
+  const prevCharOne = prevVal.charAt(0);
+  console.log('list rules characters: ', Number(charOne), " ", Number(prevCharOne), " ", Number(nextCharOne));
   if (
     charOne === '-' ||
     charOne === '•' ||
@@ -30,7 +33,7 @@ listRules.useListElements = (
         severity: 'warning',
       });
     }
-  } else if (!Number.isNaN(charOne)) {
+  } else if (!Number.isNaN(Number(charOne))) {
     if (
       Number(charOne) === Number(prevCharOne) + 1 ||
       Number(charOne) === Number(nextCharOne) - 1

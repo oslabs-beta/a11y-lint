@@ -14,9 +14,11 @@ import formRules from './ruleCategories/formRules';
 import tableRules from './ruleCategories/tableRules';
 import listRules from './ruleCategories/listRules';
 import { cssRulesFromObject } from './cssRules';
+import { DebugConsoleMode } from 'vscode';
 
 export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
   const issues: Issue[] = [];
+  console.log('ENTERED JSX RULES');
   for (let i = 0; i < parsedJsx.length; i++) {
     //want to test all nodes for links EXCEPT <a> tags
     if (parsedJsx[i].type !== 'a') {
@@ -28,10 +30,13 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
     }
     //want to check for potential list structures
     if (parsedJsx[i].value) {
+      const node: Node = parsedJsx[i];
+      const prevValue: Node | {value: string} = parsedJsx[i-2] || {value: ' '};
+      const nextValue: Node | {value: string}  = parsedJsx[i+2] || {value: ' '};
       listRules.useListElements(
         parsedJsx[i],
-        parsedJsx[i - 1],
-        parsedJsx[i + 1],
+        prevValue.value || ' ',
+        nextValue.value || ' ',
         issues
       );
     }

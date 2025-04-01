@@ -51,9 +51,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
                 startLine: location?.startLine,
                 endLine: location?.endLine,
                 startColumn: location?.startCol + addLineStart,
-                endColumn: location?.endCol + addLineEnd,
+                endColumn: location?.endCol + addLineStart + addLineEnd,
               };
-              addLineStart += addLineEnd + 1;
+              addLineStart += addLineEnd + 3;
             }
             cache.styles = {};
             cache.styles![selector] = {
