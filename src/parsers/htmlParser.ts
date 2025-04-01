@@ -40,7 +40,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
             let values: String[] = value.split(';');
             let declarations: Declarations = {};
             let addLineStart: number = 0;
-            const selector = node.tag;
+            const selector = node.tagName;
             const selectorLocation = node.sourceCodeLocation;
             const location = node.sourceCodeLocation?.attrs['style'];
             for (let i = 0; i < values.length - 1; i++) {
@@ -58,10 +58,10 @@ export function parseHTML(code: string, filePath: string): Issue[] {
             cache.styles = {};
             cache.styles![selector] = {
               declarations: declarations,
-              startLine: selectorLocation.lineStart,
-              endLine: selectorLocation.lineEnd,
-              startColumn: selectorLocation.colStart,
-              endColumn: selectorLocation.colEnd,
+              startLine: selectorLocation.startLine,
+              endLine: selectorLocation.endLine,
+              startColumn: selectorLocation.startCol,
+              endColumn: selectorLocation.endCol,
             };
           }
         }
@@ -83,12 +83,14 @@ export function parseHTML(code: string, filePath: string): Issue[] {
 
       cache.attributes = attributes;
 
-      cache.location = {
-        startLine: node.sourceCodeLocation.startLine,
-        startCol: node.sourceCodeLocation.startCol,
-        endLine: node.sourceCodeLocation.endLine,
-        endCol: node.sourceCodeLocation.endCol,
-      };
+      if (node.sourceCodeLocation) {
+        cache.location = {
+          startLine: node.sourceCodeLocation.startLine,
+          startCol: node.sourceCodeLocation.startCol,
+          endLine: node.sourceCodeLocation.endLine,
+          endCol: node.sourceCodeLocation.endCol,
+        };
+      }
     }
 
     // Recursively visit child nodes
@@ -107,5 +109,6 @@ export function parseHTML(code: string, filePath: string): Issue[] {
   };
 
   const htmlElements = extractElements(document);
+  console.log(htmlElements);
   return htmlRules(htmlElements, filePath);
 }
