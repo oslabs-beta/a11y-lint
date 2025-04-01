@@ -12,6 +12,7 @@ import imageRules from './ruleCategories/imageRules';
 import controlRules from './ruleCategories/controlRules';
 import formRules from './ruleCategories/formRules';
 import tableRules from './ruleCategories/tableRules';
+import listRules from './ruleCategories/listRules';
 
 export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
   const issues: Issue[] = [];
@@ -20,6 +21,16 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
     if (parsedJsx[i].type !== 'a') {
       controlRules.useATag(parsedJsx[i], issues);
     }
+    //want to check for potential list structures
+    if (parsedJsx[i].value) {
+      listRules.useListElements(
+        parsedJsx[i],
+        parsedJsx[i - 1],
+        parsedJsx[i + 1],
+        issues
+      );
+    }
+
     //if our node is an img tag
     if (parsedJsx[i].type === 'img') {
       imageRules.hasAltText(parsedJsx[i], issues);
