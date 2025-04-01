@@ -66,10 +66,10 @@ export function parseJSX(code: string, filePath: string): Issue[] {
             const addLineEnd: number = decPair[0].length + decPair[1].length;
             declarations[decPair[0]] = {
               value: decPair[1],
-              startLine: location?.start.line! + addLineStart,
-              endLine: location?.end.line! + addLineEnd,
-              startColumn: location?.start.column!,
-              endColumn: location?.end.column!,
+              startLine: location?.start.line!,
+              endLine: location?.end.line!,
+              startColumn: location?.start.column! + addLineStart,
+              endColumn: location?.end.column! + addLineEnd,
             };
             addLineStart += addLineEnd + 1;
           }
