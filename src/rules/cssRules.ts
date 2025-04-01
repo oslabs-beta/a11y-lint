@@ -14,11 +14,11 @@ import keyboardRules from './ruleCategories/keyboardRules';
 // step 4- loops through the parsed CSS and applies our rules to them, if something fails, it creates an issue
 export function cssRulesFromObject(
   parsedCSS: CssSelectorObj,
-  file: string
+  file: string,
+  issues: Issue[] = []
 ): Issue[] {
   console.log('cssRules function reached ❄️');
   //create issues array
-  const issues: Issue[] = [];
   //looping through parsedCSS
   console.log(parsedCSS);
   for (const selector in parsedCSS) {

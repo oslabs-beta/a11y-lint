@@ -13,6 +13,7 @@ import controlRules from './ruleCategories/controlRules';
 import formRules from './ruleCategories/formRules';
 import tableRules from './ruleCategories/tableRules';
 import listRules from './ruleCategories/listRules';
+import { cssRulesFromObject } from './cssRules';
 
 export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
   const issues: Issue[] = [];
@@ -20,6 +21,10 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
     //want to test all nodes for links EXCEPT <a> tags
     if (parsedJsx[i].type !== 'a') {
       controlRules.useATag(parsedJsx[i], issues);
+    }
+    //run in-line styling through CSS parser
+    if (parsedJsx[i].styles) {
+      cssRulesFromObject(parsedJsx[i].styles!, file, issues);
     }
     //want to check for potential list structures
     if (parsedJsx[i].value) {
