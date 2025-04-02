@@ -6,20 +6,20 @@ const tableRules: { [key: string]: Function } = {};
 tableRules.usesCaption = (parsedSlice: Node[], issues: Issue[]): Issue[] => {
   if (parsedSlice[1].type !== "caption") {
     issues.push({
-      line: parsedSlice[0].location.lineStart,
-      column: parsedSlice[0].location.colStart,
-      endLine: parsedSlice[0].location.lineEnd,
-      endColumn: parsedSlice[0].location.colEnd,
+      line: parsedSlice[0].location.startLine,
+      column: parsedSlice[0].location.startColumn,
+      endLine: parsedSlice[0].location.startLine,
+      endColumn: parsedSlice[0].location.startColumn+6,
       message: `Tables should have <caption> element to provide table title.`,
       fix: "Please add a descriptive <caption> tag on the first line after <table>. See WCAG 1.3.1: https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html",
       severity: "warning",
     });
   } else if (!parsedSlice[1].value) {
     issues.push({
-      line: parsedSlice[1].location.lineStart,
-      column: parsedSlice[1].location.colStart,
-      endLine: parsedSlice[1].location.lineEnd,
-      endColumn: parsedSlice[1].location.colEnd,
+      line: parsedSlice[1].location.startLine,
+      column: parsedSlice[1].location.startColumn,
+      endLine: parsedSlice[1].location.endLine,
+      endColumn: parsedSlice[1].location.endColumn,
       message: `Caption element requires text titling table.`,
       fix: "Please add a decriptive title between <caption> tags.",
       severity: "warning",
@@ -65,10 +65,10 @@ tableRules.hasHeaders = (
     //check to make sure each header has a scope attribute
     if (!parsedSlice[i].attributes.hasOwnProperty("scope")) {
       issues.push({
-        line: parsedSlice[i].location.lineStart,
-        column: parsedSlice[i].location.colStart,
-        endLine: parsedSlice[i].location.lineEnd,
-        endColumn: parsedSlice[i].location.colEnd,
+        line: parsedSlice[i].location.startLine,
+        column: parsedSlice[i].location.startColumn,
+        endLine: parsedSlice[i].location.endLine,
+        endColumn: parsedSlice[i].location.endColumn,
         message: `Each header should have "scope" attribute.`,
         fix: 'Please add a "scope" attribute specifying whether a header cell is a header for a column, row, or group of columns or rows.',
         severity: "warning",
@@ -80,10 +80,10 @@ tableRules.hasHeaders = (
 
   if (tdCount > thCount) {
     issues.push({
-      line: parsedSlice[0].location.lineStart,
-      column: parsedSlice[0].location.colStart,
-      endLine: parsedSlice[0].location.lineEnd,
-      endColumn: parsedSlice[0].location.colEnd,
+      line: parsedSlice[0].location.startLine,
+      column: parsedSlice[0].location.startColumn,
+      endLine: parsedSlice[0].location.startLine,
+      endColumn: parsedSlice[0].location.startColumn+6,
       message: `Tables should have clearly labeled headers.`,
       fix: "Please add a descriptive <th> tag for each column of the table.",
       severity: "warning",

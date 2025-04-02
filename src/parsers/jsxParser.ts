@@ -11,24 +11,7 @@ import { jsxRules } from '../rules/jsxRules';
 import { Issue } from '../types/issue';
 import { Declarations } from '../types/css';
 
-const testCode = `()=>(
-  <div>
-  <p>Hello world</p>
-  <a href="url2"></a>
-  <input type='text'/>
-  <table>
-  <tr>
-  <td>This is in my table</td>
-  </tr>
-  </table>
-  <img src="url"/>
-  </div>)`;
 
-// const parsedTest = parseJSX(testCode, '');
-
-// console.log(parseJSX(testCode, ''));
-
-//TODO: need to differentiate between opening and closing JSX elements
 export function parseJSX(code: string, filePath: string): Issue[] {
   let prevNodeType: String = '';
   let results: Node[] = [];

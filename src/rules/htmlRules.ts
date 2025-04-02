@@ -11,9 +11,9 @@ import formRules from './ruleCategories/formRules';
 import tableRules from './ruleCategories/tableRules';
 import listRules from './ruleCategories/listRules';
 import { cssRulesFromObject } from './cssRules';
-// const allRules = {
-//   ...globalCodeRules,
-// };
+const allRules = {
+  ...globalCodeRules,
+};
 
 
 // step 4- loops through the parsed HTML and applies our rules to them, if something fails, it creates an issue
@@ -23,21 +23,20 @@ export function htmlRules(
 ): Issue[] {
   const issues: Issue[] = [];
 
-  // for (const node of nodes) {
-  //   for (const ruleKey in allRules) {
-  //     const ruleFn = allRules[ruleKey];
-  //     const issue = ruleFn(node);
-  //     console.log(allRules)
-  //     if (issue) {
-  //       issues.push(issue);
-  //     }
-  //   }
-  // }
-
-  console.log("HTML nodes list: ", nodes);
+  for (const node of nodes) {
+    for (const ruleKey in allRules) {
+      const ruleFn = allRules[ruleKey];
+      const issue = ruleFn(node);
+      console.log(allRules)
+      if (issue) {
+        issues.push(issue);
+      }
+    }
+  }
 
   for (let i = 0; i < nodes.length; i++) {
   //   //want to test all nodes for links EXCEPT <a> tags
+  console.log("testing current node: ", nodes[i]);
     if (nodes[i].type !== 'a') {
       controlRules.useATag(nodes[i], issues);
     }

@@ -39,10 +39,11 @@ export function parseHTML(code: string, filePath: string): Issue[] {
 
             let values: String[] = value.split(';');
             let declarations: Declarations = {};
-            let addLineStart: number = 0;
+            let addLineStart: number = 7;
             const selector = node.tagName;
             const selectorLocation = node.sourceCodeLocation;
             const location = node.sourceCodeLocation?.attrs['style'];
+            console.log('style declarations locations: ', location);
             for (let i = 0; i < values.length - 1; i++) {
               const decPair: string[] = values[i].trim().split(':');
               const addLineEnd: number = decPair[0].length + decPair[1].length;
@@ -51,7 +52,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
                 startLine: location?.startLine,
                 endLine: location?.endLine,
                 startColumn: location?.startCol + addLineStart,
-                endColumn: location?.endCol + addLineStart + addLineEnd,
+                endColumn: location?.startCol + addLineStart + addLineEnd,
               };
               addLineStart += addLineEnd + 3;
             }
