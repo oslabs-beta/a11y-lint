@@ -1,8 +1,8 @@
 {
   "name": "A11yLint",
-  "displayName": "a11ylint",
+  "displayName": "A11y Lint",
   "description": "Accessibility linter for VS Code",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "publisher": "A11yLint",
   "engines": {
     "vscode": "^1.98.0"
@@ -11,6 +11,7 @@
     "type": "git",
     "url": "https://github.com/oslabs-beta/a11y-lint.git"
   },
+  "icon": "src/assets/A11yLintLogo.png",
   "main": "./dist/extension.js",
   "activationEvents": [
     "onLanguage:css",

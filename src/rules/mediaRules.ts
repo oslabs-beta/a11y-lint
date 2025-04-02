@@ -17,9 +17,9 @@ export function mediaRules(elements: HtmlExtractedNode[]): Issue[] {
       if (!hasTranscript) {
         issues.push({
           line: el.location.startLine,
-          column: el.location.startCol,
+          column: el.location.startColumn,
           endLine: el.location.endLine,
-          endColumn: el.location.endCol,
+          endColumn: el.location.endColumn,
           message: '<audio> is missing a transcript for accessibility.',
           severity: 'error'
         });
@@ -31,9 +31,9 @@ export function mediaRules(elements: HtmlExtractedNode[]): Issue[] {
       const autoplayLoc = el.attributes['autoplay'].location || el.location;
       issues.push({
         line: autoplayLoc.startLine,
-        column: autoplayLoc.startCol,
+        column: autoplayLoc.startColumn,
         endLine: autoplayLoc.endLine,
-        endColumn: autoplayLoc.endCol,
+        endColumn: autoplayLoc.endColumn,
         message: `<${el.type}> should not use autoplay for accessibility reasons.`,
         severity: 'error'
       });
@@ -43,9 +43,9 @@ export function mediaRules(elements: HtmlExtractedNode[]): Issue[] {
     if ((el.type === 'audio' || el.type === 'video') && !el.attributes?.['controls']) {
       issues.push({
         line: el.location.startLine,
-        column: el.location.startCol,
+        column: el.location.startColumn,
         endLine: el.location.endLine,
-        endColumn: el.location.endCol,
+        endColumn: el.location.endColumn,
         message: `<${el.type}> is missing the 'controls' attribute, which is required for accessibility.`,
         severity: 'error'
       });
@@ -55,9 +55,9 @@ export function mediaRules(elements: HtmlExtractedNode[]): Issue[] {
     if (el.type === 'video' && !el.attributes?.['controls']) {
       issues.push({
         line: el.location.startLine,
-        column: el.location.startCol,
+        column: el.location.startColumn,
         endLine: el.location.endLine,
-        endColumn: el.location.endCol,
+        endColumn: el.location.endColumn,
         message: '<video> must include a way to be paused — add controls or a custom pause button.',
         severity: 'error'
       });
@@ -67,9 +67,9 @@ export function mediaRules(elements: HtmlExtractedNode[]): Issue[] {
     if ((el.type === 'audio' || el.type === 'video') && !el.attributes?.['controls']) {
       issues.push({
         line: el.location.startLine,
-        column: el.location.startCol,
+        column: el.location.startColumn,
         endLine: el.location.endLine,
-        endColumn: el.location.endCol,
+        endColumn: el.location.endColumn,
         message: `<${el.type}> must use appropriate markup for media controls.`,
         severity: 'error'
       });

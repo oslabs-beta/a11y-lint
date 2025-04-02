@@ -4,7 +4,11 @@ import tinycolor from 'tinycolor2';
 
 const contrastRules: { [key: string]: Function } = {};
 
-contrastRules.checkContrast = (declarations: Declarations, issues: Issue[]) => {
+contrastRules.checkContrast = (
+  selector: string,
+  declarations: Declarations,
+  issues: Issue[]
+) => {
   //checking to see if there is an attribute of color and background color if there is there will eb contrast
   if (declarations['color'] && declarations['background-color']) {
     console.log('you are in contrast if statement 🍣');
@@ -29,6 +33,7 @@ contrastRules.checkContrast = (declarations: Declarations, issues: Issue[]) => {
         message: `Contrast is not high enough.`,
         fix: 'Choose color with higher contrast`',
         severity: 'warning',
+        selector: selector,
       });
     }
   }
@@ -50,6 +55,7 @@ contrastRules.checkButtonBorder = (
         message: `No border on button element`,
         fix: 'Add border attribute to button',
         severity: 'warning',
+        selector: selector,
       });
     }
   }

@@ -1,14 +1,88 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  width: 100%;
+
+  color-scheme: light dark;
+  color: rgba(30, 27, 27, 0.87);
+  background-color: #faeddf;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   font-size: 7px;
-  color: red;
-  background-color: aqua;
+  color: rgb(255, 1, 1);
+  background-color: rgb(198, 203, 186);
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
 }
 
 img {
-  width: 10px;
+  width: 100px;
 }
+
 
 button {
   font-size: 9px;
-  border: 1px;
 }
+
+.fancy-button {
+  font-size: 9px;
+}
+
+button:focus {
+  border: 5px;
+}
+
+
+#demoLink {
+  padding-left: 1px;
+  padding-right: 10px;
+  color: black;
+  text-decoration: underline;
+}
+.download {
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+}
+
+.download:focus {
+  border: 5px;
+}
+
+.mission {
+  padding-top: 40px;
+  padding-bottom: 0px;
+  left: 20px;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+}
+
+.missionTitle h1 {
+  margin-top: 40px;
+  margin-bottom: 0px;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+.missionTitle p {
+  display: flex;
+  align-items: flex-start;
+  width: 90%;
+  text-align: center;
+  font-size: 1.5px;
+}
+
+

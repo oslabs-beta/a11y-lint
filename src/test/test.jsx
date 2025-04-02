@@ -6,6 +6,9 @@ function test() {
     <form>
     <input type='text'/>
     <input type='button'/>
+
+    <button className='fancy-button'></button>
+    
     </form>
       <p>1. Create accessbility linter</p>
       <p>2. Make Reddit joke from 2009</p>

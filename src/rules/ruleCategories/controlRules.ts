@@ -60,7 +60,7 @@ controlRules.useATag = (parsedJsx: Node, issues: Issue[]): Issue[] => {
 };
 
 controlRules.useButtonTag = (parsedJsx: Node, issues: Issue[]): Issue[] => {
-  if (parsedJsx.attributes.type.value === 'button') {
+  if (parsedJsx.attributes.type.value && parsedJsx.attributes.type.value === 'button') {
     issues.push({
       line: parsedJsx.attributes.type.location.startLine,
       column: parsedJsx.attributes.type.location.startColumn - 1,

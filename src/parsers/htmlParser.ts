@@ -3,6 +3,8 @@ import { htmlRules } from '../rules/htmlRules';
 import { Issue } from '../types/issue';
 import { HtmlExtractedNode } from '../types/html';
 import { Declarations, CssSelectorObj } from '../types/css';
+import { addSelectorUsage, addDependency } from '../core/dependencyGraph';
+import path from 'path';
 // -----------------------------
 // Parses HTML string, extracts elements, applies rules
 // -----------------------------
@@ -31,6 +33,19 @@ export function parseHTML(code: string, filePath: string): Issue[] {
 
       if (Array.isArray(node.attrs)) {
         for (const attr of node.attrs) {
+          //tracking css selectors
+          //tracking css selectors
+          if (attr.name === 'class') {
+            const classNames = attr.value.split(/\s+/); //in case multiple
+            classNames.forEach((cls: any) => {
+              addSelectorUsage(`.${cls}`, filePath);
+            });
+          }
+          //tracking id selectors
+          if (attr.name === `id`) {
+            addSelectorUsage(`#${attr.value}`, filePath);
+          }
+
           if (attr.name !== 'style') {
             attributes[attr.name] = { value: attr.value };
           } else {
@@ -67,11 +82,27 @@ export function parseHTML(code: string, filePath: string): Issue[] {
           }
         }
       }
+      // Track file dependencies
+      if (
+        cache.type === 'link' &&
+        attributes['rel']?.value === 'stylesheet' &&
+        attributes['href']
+      ) {
+        const href = attributes['href'].value;
+        const linkedFile = path.resolve(path.dirname(filePath), href);
+        addDependency(filePath, linkedFile);
+      }
 
+
+      if (cache.type === 'script' && attributes['src']) {
+        const src = attributes['src'].value;
+        const linkedFile = path.resolve(path.dirname(filePath), src);
+        addDependency(filePath, linkedFile);
+      }
       const attrLocs = node.sourceCodeLocation?.attrs;
       if (attrLocs) {
         for (const attrName in attrLocs) {
-          if (attributes[attrName]) {
+          if (attrLocs && attributes[attrName]) {
             attributes[attrName].location = {
               startLine: attrLocs[attrName].startLine,
               startColumn: attrLocs[attrName].startCol,
@@ -93,7 +124,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
         };
       }
     }
-
+    if (Object.keys(cache).length > 1) {
+      output.push(cache as HtmlExtractedNode);
+    }
     // Recursively visit child nodes
     if (node.childNodes) {
       for (const child of node.childNodes) {
@@ -103,9 +136,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
         extractElements(child, output);
       }
     }
-    if (Object.keys(cache).length > 1) {
-      output.push(cache as HtmlExtractedNode);
-    }
+    
     return output;
   };
 

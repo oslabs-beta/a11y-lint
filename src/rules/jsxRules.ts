@@ -12,6 +12,11 @@ import formRules from './ruleCategories/formRules';
 import tableRules from './ruleCategories/tableRules';
 import listRules from './ruleCategories/listRules';
 import { cssRulesFromObject } from './cssRules';
+import { DebugConsoleMode } from 'vscode';
+import { getSelectorDeclarations } from '../core/dependencyGraph';
+import { CssSelectorObj } from '../types/css';
+import { splitSelector } from '../core/splitSelector';
+
 
 export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
   const issues: Issue[] = [];
@@ -72,5 +77,70 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
       tableRules.usesCaption(parsedSlice, issues);
     }
   }
+
+  //create a fake CSS object from class/id uses
+  const virtualCSS: CssSelectorObj = {};
+
+  for (const node of parsedJsx) {
+    const attrs = node.attributes || {};
+    const lineInfo = {
+      startLine: node.location?.startLine || 0,
+      startColumn: node.location?.startColumn || 0,
+      endLine: node.location?.endLine || 0,
+      endColumn: node.location?.endColumn || 0,
+    };
+
+    if (attrs.className) {
+      attrs.className.value.split(/\s+/).forEach((cls) => {
+        const selector = `.${cls}`;
+        const fromCSS = getSelectorDeclarations(selector); //get real css info
+        virtualCSS[selector] = {
+          ...lineInfo,
+          declarations: fromCSS?.declarations || {},
+        };
+      });
+    }
+
+    if (attrs.id) {
+      const selector = `#${attrs.id.value}`;
+      const fromCSS = getSelectorDeclarations(selector); //get real css info
+      virtualCSS[selector] = {
+        ...lineInfo,
+        declarations: fromCSS?.declarations || {},
+      };
+    }
+  }
+
+  // run CSS rules on all selectors used in JSX
+  const cssIssues = cssRulesFromObject(virtualCSS, file);
+
+  // attach issues to the JSX nodes based on matching selector
+  for (const issue of cssIssues) {
+    if (!issue.selector) {
+      continue;
+    }
+
+    const selectorParts = splitSelector(issue.selector);
+    const match = parsedJsx.find((node) => {
+      const attrs = node.attributes || {};
+      const classList = attrs.className?.value?.split(/\s+/) || [];
+      const id = attrs.id?.value;
+      return selectorParts.some(
+        (sel) =>
+          (sel.startsWith('.') && classList.includes(sel.slice(1))) ||
+          (sel.startsWith('#') && sel.slice(1) === id)
+      );
+    });
+
+    if (match?.location) {
+      issue.line = match.location.startLine || 0;
+      issue.column = match.location.startColumn;
+      issue.endLine = match.location.endLine || 0;
+      issue.endColumn = match.location.endColumn;
+    }
+
+    issues.push(issue);
+  }
+
   return issues;
 }

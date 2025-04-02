@@ -27,24 +27,18 @@ export function cssRulesFromObject(
     //checking for button border
     contrastRules.checkButtonBorder(selector, parsedCSS[selector], issues);
     //checking for appropriate color contrast
-    contrastRules.checkContrast(declarations, issues);
+    contrastRules.checkContrast(selector, declarations, issues);
     //must have 200% scalable font
-    appearanceRules.textSize200(declarations, issues);
+    appearanceRules.textSize200(selector, declarations, issues);
     //must have visible focus styles
     keyboardRules.checkVisibleFocusStyle(selector, parsedCSS[selector], issues);
     //if an element is interactive it needs focus styling
-    //first get a list of the selectors that already have :focus
-    const focusSelectors = new Set(
-      Object.keys(parsedCSS).filter((select) => {
-        return select.includes(':focus');
-      })
-    );
-    keyboardRules.checkMissingFocusStyles(
-      selector,
-      parsedCSS[selector],
-      issues,
-      focusSelectors
-    );
+    // keyboardRules.checkMissingFocusStyles(
+    //   selector,
+    //   parsedCSS[selector],
+    //   issues,
+    //   focusSelectors
+    // );
   }
   return issues;
 }
