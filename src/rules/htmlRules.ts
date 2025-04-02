@@ -5,6 +5,12 @@
 import { Issue } from '../types/issue';
 import { HtmlExtractedNode } from '../types/html';
 import globalCodeRules from '../rules/ruleCategories/globalCodeRules';
+import imageRules from './ruleCategories/imageRules';
+import controlRules from './ruleCategories/controlRules';
+import formRules from './ruleCategories/formRules';
+import tableRules from './ruleCategories/tableRules';
+import listRules from './ruleCategories/listRules';
+import { cssRulesFromObject } from './cssRules';
 const allRules = {
   ...globalCodeRules,
 };
@@ -27,5 +33,6 @@ export function htmlRules(
       }
     }
   }
+
   return issues;
 }
