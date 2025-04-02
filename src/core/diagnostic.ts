@@ -30,4 +30,8 @@ export function toDiagnostics(issues: Issue[]): vscode.Diagnostic[] {
 
     return diagnostic;
   });
+
+  const diagnosticCollection = vscode.languages.createDiagnosticCollection('a11y-lint');
+
+
 }

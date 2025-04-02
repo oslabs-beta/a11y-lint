@@ -57,7 +57,6 @@ async function preloadAllFiles(diagnostics: vscode.DiagnosticCollection) {
 export async function activate(context: vscode.ExtensionContext) {
   vscode.window.showInformationMessage('🔥 A11YLint activated!');
   const diagnostics = vscode.languages.createDiagnosticCollection('a11ylint');
-
   //preload
   await preloadAllFiles(diagnostics);
 
@@ -107,3 +106,4 @@ export async function activate(context: vscode.ExtensionContext) {
 
   console.log('🥶 A11yLint is now active');
 }
+

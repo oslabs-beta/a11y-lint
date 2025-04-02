@@ -29,7 +29,7 @@ listRules.useListElements = (
         endLine: node.location.lineEnd,
         endColumn: node.location.colEnd,
         message: `Lists should use list elements.`,
-        fix: 'Please wrap your list in <ul>, <ol>, or <dl> tags.',
+        fix: 'Please wrap your list in <ul>, <ol>, or <dl> tags. See WCAG 1.3.1: https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.htmll',
         severity: 'warning',
       });
     }
@@ -45,7 +45,7 @@ listRules.useListElements = (
           endLine: node.location.lineEnd,
           endColumn: node.location.colEnd,
           message: `Lists should use list elements.`,
-          fix: 'Please wrap your list in <ul>, <ol>, or <dl> tags.',
+          fix: 'Please wrap your list in <ul>, <ol>, or <dl> tags. https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html',
           severity: 'warning',
         });
       }

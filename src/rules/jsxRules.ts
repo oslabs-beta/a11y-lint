@@ -6,8 +6,6 @@
 
 import { Issue } from '../types/issue';
 import { Node } from '../types/jsx';
-import { parse } from '@babel/parser';
-import traverse from '@babel/traverse';
 import imageRules from './ruleCategories/imageRules';
 import controlRules from './ruleCategories/controlRules';
 import formRules from './ruleCategories/formRules';
@@ -19,9 +17,10 @@ import { getSelectorDeclarations } from '../core/dependencyGraph';
 import { CssSelectorObj } from '../types/css';
 import { splitSelector } from '../core/splitSelector';
 
+
 export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
   const issues: Issue[] = [];
-  console.log('ENTERED JSX RULES');
+
   for (let i = 0; i < parsedJsx.length; i++) {
     //want to test all nodes for links EXCEPT <a> tags
     if (parsedJsx[i].type !== 'a') {
