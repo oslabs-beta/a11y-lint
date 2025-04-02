@@ -11,7 +11,7 @@ export function toDiagnostics(issues: Issue[]): vscode.Diagnostic[] {
   return issues.map((issue) => {
     const range = new vscode.Range(
       issue.line - 1,
-      issue.column ? issue.column - 1: 0,
+      issue.column ? issue.column - 1 : 0,
       (issue.endLine ?? issue.line) - 1,
       issue.endColumn ?? issue.column ?? 100
     );
@@ -31,7 +31,6 @@ export function toDiagnostics(issues: Issue[]): vscode.Diagnostic[] {
     return diagnostic;
   });
 
-  const diagnosticCollection = vscode.languages.createDiagnosticCollection('a11y-lint');
-
-
+  const diagnosticCollection =
+    vscode.languages.createDiagnosticCollection('a11y-lint');
 }

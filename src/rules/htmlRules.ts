@@ -4,10 +4,11 @@
 // -----------------------------
 import { Issue } from '../types/issue';
 import { HtmlExtractedNode } from '../types/html';
-import { cssRulesFromObject } from './cssRules';
 import { CssSelectorObj } from '../types/css';
 import { getSelectorDeclarations } from '../core/dependencyGraph';
 import { splitSelector } from '../core/splitSelector';
+
+import globalCodeRules from './ruleCategories/globalCodeRules';
 import imageRules from './ruleCategories/imageRules';
 import controlRules from './ruleCategories/controlRules';
 import formRules from './ruleCategories/formRules';
