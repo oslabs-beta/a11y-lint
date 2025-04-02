@@ -12,7 +12,7 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
         endline: node.location?.endLine || 0,
         endColumn: node.location?.endCol,
         message:
-          '<html> tag is missing a "lang" attribute. WCAG Reference [1.3.1], [3.1.1]',
+          '<html> tag is missing a "lang" attribute. See WCAG 3.1.1: https://www.w3.org/WAI/WCAG21/Understanding/language-of-page.html',
         severity: 'error',
       };
     }
@@ -27,7 +27,7 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
         column: node.location?.startCol,
         endline: node.location?.endLine || 0,
         endColumn: node.location?.endCol,
-        message: '<title> Pages must have a descriptive title',
+        message: '<title> Pages must have a descriptive title. See WCAG 2.4.2: https://www.w3.org/WAI/WCAG21/Understanding/page-titled.html',
         severity: 'error',
       };
     }
@@ -42,7 +42,7 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
         column: node.location?.startCol,
         endline: node.location?.endLine || 0,
         endColumn: node.location?.endCol,
-        message: '<img> tag is missing an "alt" attribute.',
+        message: '<img> tag is missing an "alt" attribute. See WCAG 1.1.1: https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html',
         severity: 'error',
       };
     }
@@ -55,7 +55,7 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
         column: node.location?.startCol,
         endline: node.location?.endLine || 0,
         endColumn: node.location?.endCol,
-        message: `Avoid using the 'autofocus' attribute. It can cause accessibility issues.`,
+        message: `Avoid using the 'autofocus' attribute. It can cause accessibility issues. See WCAG 2.2.2: https://www.w3.org/WAI/WCAG21/Understanding/pause-stop-hide.html`,
         severity: 'warning',
         fix: `Remove the 'autofocus' attribute and let users control focus.`,
       };
