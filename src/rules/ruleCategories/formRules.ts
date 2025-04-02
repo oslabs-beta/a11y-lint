@@ -16,7 +16,7 @@ formRules.labelInputs = (
       endLine: parsedJsx.location.lineEnd,
       endColumn: parsedJsx.location.colEnd,
       message: `Input fields should be labeled.`,
-      fix: 'Please add a label tag. Use "htmlFor" attribute to assign label to the specific input it marks.',
+      fix: 'Please add a label tag. Use "htmlFor" attribute to assign label to the specific input it marks.  See WCAG 1.3.1: https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html',
       severity: 'warning',
     });
   }
@@ -38,7 +38,7 @@ formRules.useFieldsetLegend = (
       endLine: parsedJsx.location.lineEnd,
       endColumn: parsedJsx.location.colEnd,
       message: `Consider using <fieldset> and <legend> tags.`,
-      fix: 'If suitable, a <fieldset> can be used to group form items and a <legend> tag used to label them.',
+      fix: 'If suitable, a <fieldset> can be used to group form items and a <legend> tag used to label them.  See WCAG 1.3.1: https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html',
       severity: 'information',
     });
   }
