@@ -4,6 +4,7 @@ import { Issue } from '../../types/issue';
 const appearanceRules: { [key: string]: Function } = {};
 
 appearanceRules.textSize200 = (
+  selector: string,
   declarations: Declarations,
   issues: Issue[]
 ): Issue[] => {
@@ -24,6 +25,7 @@ appearanceRules.textSize200 = (
         message: `Font size "${value}" is not scalable.`,
         fix: 'Use rem, em, or % instead of a fixed unit like px',
         severity: 'warning',
+        selector: selector,
       });
     }
   }

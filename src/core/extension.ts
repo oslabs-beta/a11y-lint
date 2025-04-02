@@ -38,7 +38,7 @@ async function preloadAllFiles(diagnostics: vscode.DiagnosticCollection) {
     '**/*.{js,jsx,ts,tsx,html,css}',
     '**/node_modules/**'
   );
-  console.log(`🗂 Preloading ${files.length} files...`);
+  //console.log(`🗂 Preloading ${files.length} files...`);
 
   for (const file of files) {
     const filePath = file.fsPath;
@@ -51,7 +51,7 @@ async function preloadAllFiles(diagnostics: vscode.DiagnosticCollection) {
     }
   }
 
-  console.log('✅ Finished preloading dependency graph');
+  //console.log('✅ Finished preloading dependency graph');
 }
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -64,7 +64,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.workspace.onDidSaveTextDocument((document) => {
       const filePath = document.fileName;
-      console.log(`📁 Saved file: ${filePath}`);
+      //console.log(`📁 Saved file: ${filePath}`);
       //we create a set and add the current file being saved
       const allToLint = new Set<string>();
       allToLint.add(filePath);
@@ -72,24 +72,24 @@ export async function activate(context: vscode.ExtensionContext) {
       //first we get the dependents of the file and add them to our set
       getAllDependents(filePath).forEach((dep) => allToLint.add(dep));
       //then console log out what we are going to lint
-      console.log(
-        '🔗 File-based dependents:',
-        Array.from(getAllDependents(filePath))
-      );
+      // console.log(
+      //   '🔗 File-based dependents:',
+      //   Array.from(getAllDependents(filePath))
+      // );
 
       // step 2: if its a CSS file relint all files using its selectors
       // at some point we need to work on the nested components and stuff
       if (filePath.endsWith('.css')) {
         const code = fs.readFileSync(filePath, 'utf-8');
         const selectors = extractCssSelectors(code);
-        console.log('🎯 Extracted selectors:', selectors);
+        //console.log('🎯 Extracted selectors:', selectors);
 
         for (const selector of selectors) {
           const files = getFilesForSelector(selector);
           files.forEach((f) => allToLint.add(f));
         }
       }
-      console.log('🌀 Re-linting these files:', Array.from(allToLint));
+      //console.log('🌀 Re-linting these files:', Array.from(allToLint));
 
       // step 3: relint all affected files and update diagnostics
       for (const file of allToLint) {

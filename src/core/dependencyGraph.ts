@@ -1,4 +1,5 @@
 import * as path from 'path';
+import { SelectorBlock } from '../types/css';
 
 const dependencyGraph = new Map<string, Set<string>>();
 
@@ -96,4 +97,23 @@ export function addSelectorDefinition(selector: string, filePath: string) {
  */
 export function getFilesForSelector(selector: string): Set<string> {
   return selectorGraph.get(selector) || new Set();
+}
+/*
+ * Selector Style Registry - Stores declarations
+ */
+const selectorDeclarations = new Map<string, SelectorBlock>();
+
+// Save a selector's style declarations (used for HTML/JSX linking)
+export function registerSelectorDeclarations(
+  selector: string,
+  declarations: SelectorBlock
+) {
+  selectorDeclarations.set(selector, declarations);
+}
+
+// Retrieve a selector's declarations
+export function getSelectorDeclarations(
+  selector: string
+): SelectorBlock | undefined {
+  return selectorDeclarations.get(selector);
 }

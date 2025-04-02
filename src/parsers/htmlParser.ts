@@ -34,6 +34,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
       if (Array.isArray(node.attrs)) {
         for (const attr of node.attrs) {
           //tracking css selectors
+          //tracking css selectors
           if (attr.name === 'class') {
             const classNames = attr.value.split(/\s+/); //in case multiple
             classNames.forEach((cls: any) => {
@@ -44,6 +45,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
           if (attr.name === `id`) {
             addSelectorUsage(`#${attr.value}`, filePath);
           }
+
           if (attr.name !== 'style') {
             attributes[attr.name] = { value: attr.value };
           } else {
