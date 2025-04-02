@@ -16,7 +16,7 @@ export function htmlRules(
   filePath: string
 ): Issue[] {
   const issues: Issue[] = [];
-
+console.log(nodes)
   for (const node of nodes) {
     for (const ruleKey in allRules) {
       const ruleFn = allRules[ruleKey];

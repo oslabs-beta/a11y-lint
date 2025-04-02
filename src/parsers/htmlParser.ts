@@ -70,7 +70,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
       const attrLocs = node.sourceCodeLocation?.attrs;
       if (attrLocs) {
         for (const attrName in attrLocs) {
-          if (attributes[attrName]) {
+          if (attrLocs && attributes[attrName]) {
             attributes[attrName].location = {
               startLine: attrLocs[attrName].startLine,
               startCol: attrLocs[attrName].startCol,
@@ -92,7 +92,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
         };
       }
     }
-
+    if (Object.keys(cache).length > 1) {
+      output.push(cache as HtmlExtractedNode);
+    }
     // Recursively visit child nodes
     if (node.childNodes) {
       for (const child of node.childNodes) {
@@ -102,9 +104,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
         extractElements(child, output);
       }
     }
-    if (Object.keys(cache).length > 1) {
-      output.push(cache as HtmlExtractedNode);
-    }
+    
     return output;
   };
 
