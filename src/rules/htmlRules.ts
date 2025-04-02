@@ -22,12 +22,12 @@ export function htmlRules(
   filePath: string
 ): Issue[] {
   const issues: Issue[] = [];
-console.log(nodes)
+console.log(nodes);
   for (const node of nodes) {
     for (const ruleKey in allRules) {
       const ruleFn = allRules[ruleKey];
       const issue = ruleFn(node);
-      console.log(allRules)
+      // console.log(allRules);
       if (issue) {
         issues.push(issue);
       }

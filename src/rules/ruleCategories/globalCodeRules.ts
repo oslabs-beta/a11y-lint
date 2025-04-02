@@ -21,7 +21,7 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
   //************ Test image tag for missing alt attribute ****************/
   missingUniqueTitle: (node) => {
     if (node.type === 'title' && (!node.value || node.value.trim() === '')) {
-      console.log(node.value);
+      //console.log(node.value);
       return {
         line: node.location?.startLine || 0,
         column: node.location?.startCol,
@@ -33,7 +33,25 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
     }
     return null;
   },
-
+  // //************ Test html tag for missing RTF attribute if lang is RTF lang ****************/
+  // rightToLeftLang: (node) => {
+  //   console.log("RT fucntion reached");
+  //   if (node.type === 'html' && node.attributes.lang.value === "ar" || "he") {
+  //     console.log("first if statement", );
+  //     if(!node.attributes.dir || node.attributes.dir.value !== "rtl") {
+  //       console.log("second if statement")
+  //       return {
+  //         line: node.location?.startLine || 0,
+  //         column: node.location?.startCol,
+  //         endline: node.location?.endLine || 0,
+  //         endColumn: node.location?.endCol,
+  //         message: '<html> attribute must contain a "dir" attribute that is "RTL" for Arabic and Hebrew. See WCAG 1.4.8: https://www.w3.org/TR/WCAG22/#visual-presentation',
+  //         severity: 'warning',
+  //       };
+  //     }
+  //   }
+  //   return null;
+  // },
   //************ Test image tag for missing alt attribute ****************/
   missingAltAttr: (node) => {
     if (node.type === 'img' && !node.attributes['alt']) {
