@@ -9,7 +9,6 @@ const allRules = {
   ...globalCodeRules,
 };
 
-
 // step 4- loops through the parsed HTML and applies our rules to them, if something fails, it creates an issue
 export function htmlRules(
   nodes: HtmlExtractedNode[],
@@ -21,7 +20,7 @@ export function htmlRules(
     for (const ruleKey in allRules) {
       const ruleFn = allRules[ruleKey];
       const issue = ruleFn(node);
-      console.log(allRules)
+      console.log(allRules);
       if (issue) {
         issues.push(issue);
       }

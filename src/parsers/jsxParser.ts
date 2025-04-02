@@ -10,6 +10,8 @@ import { Node } from '../types/jsx';
 import { jsxRules } from '../rules/jsxRules';
 import { Issue } from '../types/issue';
 import { Declarations } from '../types/css';
+import { addSelectorUsage, addDependency } from '../core/dependencyGraph';
+import * as nodePath from 'path';
 
 const testCode = `()=>(
   <div>
@@ -32,7 +34,7 @@ const testCode = `()=>(
 export function parseJSX(code: string, filePath: string): Issue[] {
   let prevNodeType: String = '';
   let results: Node[] = [];
-  const ast = parse(code, { plugins: ['jsx'] });
+  const ast = parse(code, { sourceType: 'module', plugins: ['jsx'] });
   traverse(ast, {
     enter(path) {
       // console.log(`enter ${path.type}(${path.key})`);
@@ -43,44 +45,54 @@ export function parseJSX(code: string, filePath: string): Issue[] {
         // console.log(path.node.loc);
         const name = String(path.node.name.name);
         const value = String(path.node.value!.value).toLowerCase();
-
-        if (name !== 'style') {
-          results[results.length - 1].attributes[name] = {
-            value: value,
-            location: {
-              lineStart: Number(path.node.loc?.start.line),
-              lineEnd: Number(path.node.loc?.end.line),
-              colStart: Number(path.node.loc?.start.column),
-              colEnd: Number(path.node.loc?.end.column),
-            },
-          };
-        } else {
-          let values: String[] = value.split(';');
-          let declarations: Declarations = {};
-          let addLineStart: number = 8;
-          const selector: string = String(results[results.length - 1].type);
-          const selectorLocation = results[results.length - 1].location;
-          const location = path.node.loc;
-          for (let i = 0; i < values.length - 1; i++) {
-            const decPair: string[] = values[i].trim().split(':');
-            const addLineEnd: number = decPair[0].length + decPair[1].length;
-            declarations[decPair[0]] = {
-              value: decPair[1],
-              startLine: location?.start.line!,
-              endLine: location?.end.line!,
-              startColumn: location?.start.column! + addLineStart,
-              endColumn: location?.start.column! + addLineStart + addLineEnd,
-            };
-            addLineStart += addLineEnd + 3;
+        if (results.length > 0) {
+          //tracking classes and ids
+          if (name === 'className') {
+            value.split(/\s+/).forEach((cls) => {
+              addSelectorUsage(`.${cls}`, filePath);
+            });
+          } else if (name === 'id') {
+            addSelectorUsage(`#${value}`, filePath);
           }
-          results[results.length - 1].styles = {};
-          results[results.length - 1].styles![selector] = {
-            declarations: declarations,
-            startLine: selectorLocation.lineStart,
-            endLine: selectorLocation.lineEnd,
-            startColumn: selectorLocation.colStart,
-            endColumn: selectorLocation.colEnd,
-          };
+
+          if (name !== 'style') {
+            results[results.length - 1].attributes[name] = {
+              value: value,
+              location: {
+                lineStart: Number(path.node.loc?.start.line),
+                lineEnd: Number(path.node.loc?.end.line),
+                colStart: Number(path.node.loc?.start.column),
+                colEnd: Number(path.node.loc?.end.column),
+              },
+            };
+          } else {
+            let values: String[] = value.split(';');
+            let declarations: Declarations = {};
+            let addLineStart: number = 8;
+            const selector: string = String(results[results.length - 1].type);
+            const selectorLocation = results[results.length - 1].location;
+            const location = path.node.loc;
+            for (let i = 0; i < values.length - 1; i++) {
+              const decPair: string[] = values[i].trim().split(':');
+              const addLineEnd: number = decPair[0].length + decPair[1].length;
+              declarations[decPair[0]] = {
+                value: decPair[1],
+                startLine: location?.start.line!,
+                endLine: location?.end.line!,
+                startColumn: location?.start.column! + addLineStart,
+                endColumn: location?.start.column! + addLineStart + addLineEnd,
+              };
+              addLineStart += addLineEnd + 3;
+            }
+            results[results.length - 1].styles = {};
+            results[results.length - 1].styles![selector] = {
+              declarations: declarations,
+              startLine: selectorLocation.lineStart,
+              endLine: selectorLocation.lineEnd,
+              startColumn: selectorLocation.colStart,
+              endColumn: selectorLocation.colEnd,
+            };
+          }
         }
       } else if (
         //should we update this to just be JSXOpeningElement? do we want closing elements too?
@@ -119,7 +131,17 @@ export function parseJSX(code: string, filePath: string): Issue[] {
         //   name: 'text',
         //   value: path.node.value,
         // });
+
+        //adding file dependency
+      } else if (path.node.type === 'ImportDeclaration') {
+        const importPath = path.node.source.value;
+        const resolvedPath = nodePath.resolve(
+          nodePath.dirname(filePath),
+          importPath
+        );
+        addDependency(filePath, resolvedPath);
       }
+
       prevNodeType = path.node.type;
       // console.log(results);
     },

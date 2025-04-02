@@ -31,8 +31,12 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
     //want to check for potential list structures
     if (parsedJsx[i].value) {
       const node: Node = parsedJsx[i];
-      const prevValue: Node | {value: string} = parsedJsx[i-2] || {value: ' '};
-      const nextValue: Node | {value: string}  = parsedJsx[i+2] || {value: ' '};
+      const prevValue: Node | { value: string } = parsedJsx[i - 2] || {
+        value: ' ',
+      };
+      const nextValue: Node | { value: string } = parsedJsx[i + 2] || {
+        value: ' ',
+      };
       listRules.useListElements(
         parsedJsx[i],
         prevValue.value || ' ',

@@ -4,17 +4,16 @@
 // passes it to the parser, and returns a list of issues.
 // -----------------------------
 
-import * as vscode from 'vscode';
+import * as fs from 'fs';
 import { parseByType } from '../parsers/index';
 import { Issue } from '../types/issue';
 
 // Step 2 - it extracts the text from file and picks a parser to use based off file type
-export function lintDocument(document: vscode.TextDocument): Issue[] {
+export function lintDocument(filePath: string): Issue[] {
+  console.log(`🚨 Linting file: ${filePath}`);
+
   console.log('lintDocument function reached 🗿');
-  //turning entire file into a string
-  const code = document.getText();
-  //name of file currently selected by user
-  const filePath = document.fileName;
-  //this function will deteermine what type of file is being parsed (HTML, JSX, CSS)
+  const code = fs.readFileSync(filePath, 'utf-8');
+  //send to parsers
   return parseByType(code, filePath);
 }

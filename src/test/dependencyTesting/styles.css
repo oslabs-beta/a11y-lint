@@ -1,0 +1,8 @@
+.primaryBtn {
+  color: white;
+  background-color: white; /* bad contrast */
+}
+
+.primaryBtn:focus {
+  border: 1px;
+}
