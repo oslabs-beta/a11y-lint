@@ -24,9 +24,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
           value: string;
           location?: {
             startLine: number;
-            startCol: number;
+            startColumn: number;
             endLine: number;
-            endCol: number;
+            endColumn: number;
           };
         };
       } = {};
@@ -54,10 +54,11 @@ export function parseHTML(code: string, filePath: string): Issue[] {
 
             let values: String[] = value.split(';');
             let declarations: Declarations = {};
-            let addLineStart: number = 0;
+            let addLineStart: number = 7;
             const selector = node.tagName;
             const selectorLocation = node.sourceCodeLocation;
             const location = node.sourceCodeLocation?.attrs['style'];
+            console.log('style declarations locations: ', location);
             for (let i = 0; i < values.length - 1; i++) {
               const decPair: string[] = values[i].trim().split(':');
               const addLineEnd: number = decPair[0].length + decPair[1].length;
@@ -66,17 +67,17 @@ export function parseHTML(code: string, filePath: string): Issue[] {
                 startLine: location?.startLine,
                 endLine: location?.endLine,
                 startColumn: location?.startCol + addLineStart,
-                endColumn: location?.endCol + addLineStart + addLineEnd,
+                endColumn: location?.startCol + addLineStart + addLineEnd,
               };
               addLineStart += addLineEnd + 3;
             }
             cache.styles = {};
             cache.styles![selector] = {
               declarations: declarations,
-              startLine: selectorLocation.startLine,
-              endLine: selectorLocation.endLine,
-              startColumn: selectorLocation.startCol,
-              endColumn: selectorLocation.endCol,
+              startLine: selectorLocation.lineStart,
+              endLine: selectorLocation.lineEnd,
+              startColumn: selectorLocation.colStart,
+              endColumn: selectorLocation.colEnd,
             };
           }
         }
@@ -104,9 +105,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
           if (attrLocs && attributes[attrName]) {
             attributes[attrName].location = {
               startLine: attrLocs[attrName].startLine,
-              startCol: attrLocs[attrName].startCol,
+              startColumn: attrLocs[attrName].startCol,
               endLine: attrLocs[attrName].endLine,
-              endCol: attrLocs[attrName].endCol,
+              endColumn: attrLocs[attrName].endCol,
             };
           }
         }
@@ -117,9 +118,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
       if (node.sourceCodeLocation) {
         cache.location = {
           startLine: node.sourceCodeLocation.startLine,
-          startCol: node.sourceCodeLocation.startCol,
+          startColumn: node.sourceCodeLocation.startCol,
           endLine: node.sourceCodeLocation.endLine,
-          endCol: node.sourceCodeLocation.endCol,
+          endColumn: node.sourceCodeLocation.endCol,
         };
       }
     }
@@ -129,7 +130,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
     // Recursively visit child nodes
     if (node.childNodes) {
       for (const child of node.childNodes) {
-        if (child.value) {
+        if (child.value && child.value.charAt(0) !== '\n') {
           cache.value = child.value;
         }
         extractElements(child, output);

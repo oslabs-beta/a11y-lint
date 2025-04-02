@@ -32,19 +32,16 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
     }
     //want to check for potential list structures
     if (parsedJsx[i].value) {
+      if (!parsedJsx[i].value?.charAt(0).match(/^[a-z]+$/i)){
       const node: Node = parsedJsx[i];
-      const prevValue: Node | { value: string } = parsedJsx[i - 2] || {
-        value: ' ',
-      };
-      const nextValue: Node | { value: string } = parsedJsx[i + 2] || {
-        value: ' ',
-      };
+      const prevValue: Node | {value: string} = parsedJsx[i-1] || {value: ' '};
+      const nextValue: Node | {value: string}  = parsedJsx[i+1] || {value: ' '};
       listRules.useListElements(
         parsedJsx[i],
         prevValue.value || ' ',
         nextValue.value || ' ',
         issues
-      );
+      );}
     }
 
     //if our node is an img tag
@@ -64,20 +61,19 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
         issues
       );
     } else if (
-      parsedJsx[i].type === 'table' &&
-      parsedJsx[i - 1].type !== 'tr'
+      parsedJsx[i].type === 'table'
     ) {
       const parsedSlice: Node[] = [parsedJsx[i]];
       //traverses our parsedJsx to find the closing tag for the table
       let j = i + 1;
-      while (parsedJsx[j].type !== 'table' && j < parsedJsx.length - 1) {
+      const isTableTag = {th: true, tr: true, td: true, caption: true, colgroup: true, col: true, thead: true, tbody: true, tfoot: true};
+      while (j < parsedJsx.length && isTableTag.hasOwnProperty(String(parsedJsx[j].type))) {
         parsedSlice.push(parsedJsx[j]);
         j++;
       }
       //makes sure that it isn't the closing table tag,
       // then checks if two nodes after there is a <th> tag
-      // tableRules.hasHeaders(parsedJsx[i], parsedJsx[i - 1], parsedJsx[i + 2], issues);
-      tableRules.hasHeadersBetter(parsedSlice, issues);
+      tableRules.hasHeaders(parsedSlice, issues);
       tableRules.usesCaption(parsedSlice, issues);
     }
   }
@@ -88,10 +84,10 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
   for (const node of parsedJsx) {
     const attrs = node.attributes || {};
     const lineInfo = {
-      startLine: node.location?.lineStart || 0,
-      startColumn: node.location?.colStart || 0,
-      endLine: node.location?.lineEnd || 0,
-      endColumn: node.location?.colEnd || 0,
+      startLine: node.location?.startLine || 0,
+      startColumn: node.location?.startColumn || 0,
+      endLine: node.location?.endLine || 0,
+      endColumn: node.location?.endColumn || 0,
     };
 
     if (attrs.className) {
@@ -137,10 +133,10 @@ export function jsxRules(parsedJsx: Node[], file: string): Issue[] {
     });
 
     if (match?.location) {
-      issue.line = match.location.lineStart || 0;
-      issue.column = match.location.colStart;
-      issue.endLine = match.location.lineEnd || 0;
-      issue.endColumn = match.location.colEnd;
+      issue.line = match.location.startLine || 0;
+      issue.column = match.location.startColumn;
+      issue.endLine = match.location.endLine || 0;
+      issue.endColumn = match.location.endColumn;
     }
 
     issues.push(issue);

@@ -9,13 +9,9 @@ listRules.useListElements = (
   nextVal: string,
   issues: Issue[]
 ): Issue[] => {
-  console.log('here we are in listRules');
   const charOne = node.value?.charAt(0);
-  // const next = nextNode.value || ' '
-  // const prev = prevNode.value || ' '
   const nextCharOne = nextVal.charAt(0);
   const prevCharOne = prevVal.charAt(0);
-  console.log('list rules characters: ', Number(charOne), " ", Number(prevCharOne), " ", Number(nextCharOne));
   if (
     charOne === '-' ||
     charOne === '•' ||
@@ -24,10 +20,10 @@ listRules.useListElements = (
   ) {
     {
       issues.push({
-        line: node.location.lineStart,
-        column: node.location.colStart,
-        endLine: node.location.lineEnd,
-        endColumn: node.location.colEnd,
+        line: node.location.startLine,
+        column: node.location.startColumn,
+        endLine: node.location.endLine,
+        endColumn: node.location.endColumn,
         message: `Lists should use list elements.`,
         fix: 'Please wrap your list in <ul>, <ol>, or <dl> tags. See WCAG 1.3.1: https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.htmll',
         severity: 'warning',
@@ -40,10 +36,10 @@ listRules.useListElements = (
     ) {
       {
         issues.push({
-          line: node.location.lineStart,
-          column: node.location.colStart,
-          endLine: node.location.lineEnd,
-          endColumn: node.location.colEnd,
+          line: node.location.startLine,
+          column: node.location.startColumn,
+          endLine: node.location.endLine,
+          endColumn: node.location.endColumn,
           message: `Lists should use list elements.`,
           fix: 'Please wrap your list in <ul>, <ol>, or <dl> tags. https://www.w3.org/WAI/WCAG21/Understanding/info-and-relationships.html',
           severity: 'warning',
