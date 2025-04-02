@@ -48,10 +48,10 @@ export function parseJSX(code: string, filePath: string): Issue[] {
           results[results.length - 1].attributes[name] = {
             value: value,
             location: {
-              lineStart: Number(path.node.loc?.start.line),
-              lineEnd: Number(path.node.loc?.end.line),
-              colStart: Number(path.node.loc?.start.column),
-              colEnd: Number(path.node.loc?.end.column),
+              startLine: Number(path.node.loc?.start.line),
+              endLine: Number(path.node.loc?.end.line),
+              startColumn: Number(path.node.loc?.start.column),
+              endColumn: Number(path.node.loc?.end.column),
             },
           };
         } else {
@@ -76,26 +76,25 @@ export function parseJSX(code: string, filePath: string): Issue[] {
           results[results.length - 1].styles = {};
           results[results.length - 1].styles![selector] = {
             declarations: declarations,
-            startLine: selectorLocation.lineStart,
-            endLine: selectorLocation.lineEnd,
-            startColumn: selectorLocation.colStart,
-            endColumn: selectorLocation.colEnd,
+            startLine: selectorLocation.startLine,
+            endLine: selectorLocation.endLine,
+            startColumn: selectorLocation.startColumn,
+            endColumn: selectorLocation.endColumn,
           };
         }
       } else if (
         //should we update this to just be JSXOpeningElement? do we want closing elements too?
-        path.node.type === 'JSXOpeningElement' ||
-        path.node.type === 'JSXClosingElement'
+        path.node.type === 'JSXOpeningElement'
       ) {
         // console.log(path.node.name);
         // console.log(path.node.loc);
         results.push({
           type: path.node.name.name,
           location: {
-            lineStart: Number(path.node.loc?.start.line),
-            lineEnd: Number(path.node.loc?.end.line),
-            colStart: Number(path.node.loc?.start.column) + 1,
-            colEnd: Number(path.node.loc?.end.column),
+            startLine: Number(path.node.loc?.start.line),
+            endLine: Number(path.node.loc?.end.line),
+            startColumn: Number(path.node.loc?.start.column) + 1,
+            endColumn: Number(path.node.loc?.end.column),
           },
           attributes: {},
         });
@@ -106,6 +105,8 @@ export function parseJSX(code: string, filePath: string): Issue[] {
         // console.log(path.node.value);
         // const name = 'text';
         results[results.length - 1].value = String(path.node.value);
+        results[results.length-1].location.endLine = path.node.loc?.end.line || 0;
+        results[results.length-1].location.endColumn = path.node.loc?.end.column || 0;
         // results[results.length - 1].attributes[name] = {
         //   value: value,
         //   location: {

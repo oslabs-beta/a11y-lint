@@ -15,7 +15,9 @@ listRules.useListElements = (
   // const prev = prevNode.value || ' '
   const nextCharOne = nextVal.charAt(0);
   const prevCharOne = prevVal.charAt(0);
-  console.log('list rules characters: ', Number(charOne), " ", Number(prevCharOne), " ", Number(nextCharOne));
+  console.log('main test node: ', node);
+  console.log('list rules numbers: ', Number(charOne), " ", Number(prevCharOne), " ", Number(nextCharOne));
+  console.log('list rules characters: ', charOne, " ", prevCharOne, " ", nextCharOne);
   if (
     charOne === '-' ||
     charOne === '•' ||

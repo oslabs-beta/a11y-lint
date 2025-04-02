@@ -14,9 +14,12 @@ function test() {
       <p style='font-size: 6px; color: blue; background-color:red;'>behold my beautiful tiny text</p>
       <table>
         <tr>
-          <td>Tables</td>
+          <th>Table header</th>
+          </tr>
+        <tr>
           <td>Stables</td>
           <td>Staples</td>
+          <td>Cables</td>
         </tr>
       </table>
     </div>

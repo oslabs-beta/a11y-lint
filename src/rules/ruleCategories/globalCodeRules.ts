@@ -7,10 +7,10 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
   missingLangAttr: (node) => {
     if (node.type === 'html' && !node.attributes['lang']) {
       return {
-        line: node.location?.startLine || 0,
-        column: node.location?.startCol,
-        endline: node.location?.endLine || 0,
-        endColumn: node.location?.endCol,
+        line: node.location?.lineStart || 0,
+        column: node.location?.colStart,
+        endline: node.location?.lineEnd || 0,
+        endColumn: node.location?.colEnd,
         message:
           '<html> tag is missing a "lang" attribute. See WCAG 3.1.1: https://www.w3.org/WAI/WCAG21/Understanding/language-of-page.html',
         severity: 'error',
@@ -23,10 +23,10 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
     if (node.type === 'title' && (!node.value || node.value.trim() === '')) {
       console.log(node.value);
       return {
-        line: node.location?.startLine || 0,
-        column: node.location?.startCol,
-        endline: node.location?.endLine || 0,
-        endColumn: node.location?.endCol,
+        line: node.location?.lineStart || 0,
+        column: node.location?.colStart,
+        endline: node.location?.lineEnd || 0,
+        endColumn: node.location?.colEnd,
         message: '<title> Pages must have a descriptive title. See WCAG 2.4.2: https://www.w3.org/WAI/WCAG21/Understanding/page-titled.html',
         severity: 'error',
       };
@@ -38,10 +38,10 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
   missingAltAttr: (node) => {
     if (node.type === 'img' && !node.attributes['alt']) {
       return {
-        line: node.location?.startLine || 0,
-        column: node.location?.startCol,
-        endline: node.location?.endLine || 0,
-        endColumn: node.location?.endCol,
+        line: node.location?.lineStart || 0,
+        column: node.location?.colStart,
+        endline: node.location?.lineEnd || 0,
+        endColumn: node.location?.colEnd,
         message: '<img> tag is missing an "alt" attribute. See WCAG 1.1.1: https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html',
         severity: 'error',
       };
@@ -51,10 +51,10 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
   avoidAutofocus: (node) => {
     if (node.attributes['autofocus'] || node.attributes['autoFocus']) {
       return {
-        line: node.location?.startLine || 0,
-        column: node.location?.startCol,
-        endline: node.location?.endLine || 0,
-        endColumn: node.location?.endCol,
+        line: node.location?.lineStart || 0,
+        column: node.location?.colStart,
+        endline: node.location?.lineEnd || 0,
+        endColumn: node.location?.colEnd,
         message: `Avoid using the 'autofocus' attribute. It can cause accessibility issues. See WCAG 2.2.2: https://www.w3.org/WAI/WCAG21/Understanding/pause-stop-hide.html`,
         severity: 'warning',
         fix: `Remove the 'autofocus' attribute and let users control focus.`,
@@ -72,10 +72,10 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
         content.includes('user-scalable=no')
       ) {
         return {
-          line: node.location?.startLine || 0,
-          column: node.location?.startCol,
-          endline: node.location?.endLine || 0,
-          endColumn: node.location?.endCol,
+          line: node.location?.lineStart || 0,
+          column: node.location?.colStart,
+          endline: node.location?.lineEnd || 0,
+          endColumn: node.location?.colEnd,
           message: `Avoid disabling zoom. Users may need to resize text.`,
           severity: 'warning',
           fix: `Remove maximum-scale=1 and user-scalable=no`,

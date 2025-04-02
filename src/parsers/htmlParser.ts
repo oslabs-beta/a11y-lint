@@ -22,9 +22,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
           value: string;
           location?: {
             startLine: number;
-            startCol: number;
+            startColumn: number;
             endLine: number;
-            endCol: number;
+            endColumn: number;
           };
         };
       } = {};
@@ -58,10 +58,10 @@ export function parseHTML(code: string, filePath: string): Issue[] {
             cache.styles = {};
             cache.styles![selector] = {
               declarations: declarations,
-              startLine: selectorLocation.startLine,
-              endLine: selectorLocation.endLine,
-              startColumn: selectorLocation.startCol,
-              endColumn: selectorLocation.endCol,
+              startLine: selectorLocation.lineStart,
+              endLine: selectorLocation.lineEnd,
+              startColumn: selectorLocation.colStart,
+              endColumn: selectorLocation.colEnd,
             };
           }
         }
@@ -73,9 +73,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
           if (attributes[attrName]) {
             attributes[attrName].location = {
               startLine: attrLocs[attrName].startLine,
-              startCol: attrLocs[attrName].startCol,
+              startColumn: attrLocs[attrName].startCol,
               endLine: attrLocs[attrName].endLine,
-              endCol: attrLocs[attrName].endCol,
+              endColumn: attrLocs[attrName].endCol,
             };
           }
         }
@@ -86,9 +86,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
       if (node.sourceCodeLocation) {
         cache.location = {
           startLine: node.sourceCodeLocation.startLine,
-          startCol: node.sourceCodeLocation.startCol,
+          startColumn: node.sourceCodeLocation.startCol,
           endLine: node.sourceCodeLocation.endLine,
-          endCol: node.sourceCodeLocation.endCol,
+          endColumn: node.sourceCodeLocation.endCol,
         };
       }
     }
@@ -96,7 +96,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
     // Recursively visit child nodes
     if (node.childNodes) {
       for (const child of node.childNodes) {
-        if (child.value) {
+        if (child.value && child.value.charAt(0) !== '\n') {
           cache.value = child.value;
         }
         extractElements(child, output);
