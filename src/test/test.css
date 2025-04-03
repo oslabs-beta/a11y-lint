@@ -35,12 +35,12 @@ button {
   font-size: 9px;
 }
 
-.fancy-button {
-  font-size: 9px;
-}
-
 button:focus {
   border: 5px;
+}
+
+.fancy-button {
+  font-size: 9px;
 }
 
 

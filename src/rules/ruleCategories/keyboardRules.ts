@@ -62,11 +62,23 @@ keyboardRules.checkMissingFocusStyles = (
   selector: string,
   selectorBlock: SelectorBlock,
   issues: Issue[],
-  focusSelectors: Set<string>
+  objValues: string[]
 ) => {
-  const baseSelector = selector.trim();
+  const focusSelectors: {[k: string]: boolean} = {};
+  console.log('initial objValues: ', objValues);
+  for (let i = 0; i<objValues.length; i++){
+    if (objValues[i].includes(':focus')){
+      const temp = objValues[i].replace(':focus', '');
+      focusSelectors[temp] = true;
+      // console.log('new focusSelectors: ', focusSelectors);
+    }
+  }
 
-  if (!focusSelectors.has(baseSelector)) {
+  console.log('focusSelectors: ', focusSelectors);
+
+  const baseSelector = selector.trim();
+  const isInteractable = {button: true, a: true, input: true, summary: true, textarea: true, select: true}
+  if (!focusSelectors[baseSelector] && isInteractable.hasOwnProperty(baseSelector)) {
     issues.push({
       line: selectorBlock.startLine,
       column: selectorBlock.startColumn,
