@@ -39,9 +39,6 @@ button {
   font-size: 9px;
 }
 
-button:focus {
-  border: 5px;
-}
 
 
 #demoLink {

@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { SelectorBlock } from '../types/css';
 
+//dependecy graph will be an object 
 const dependencyGraph = new Map<string, Set<string>>();
 
 // i guess we have to normalize file paths to avoid mismatch errors ?????
