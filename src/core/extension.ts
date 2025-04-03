@@ -38,7 +38,7 @@ function extractCssSelectors(code: string): string[] {
   return selectors;
 }
 
-//* AM I CRAZY OR IS LINE 52 TO 62 DOING THE SAME THING AS 107 TO 114
+//* THIS IS LINTING EVERYTHING ON LOAD SO THE LINTING HAPPENS ONE TIME
 //* THIS FUNCTION IS CALLED IN ACTIVATE FUNCTION
 //here we are going to lint every file so we get all of our dependencies mapped out
 //this way we dont have to save a file in a correct order to get the maps
