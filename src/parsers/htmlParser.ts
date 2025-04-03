@@ -3,6 +3,8 @@ import { htmlRules } from '../rules/htmlRules';
 import { Issue } from '../types/issue';
 import { HtmlExtractedNode } from '../types/html';
 import { Declarations, CssSelectorObj } from '../types/css';
+import { addSelectorUsage, addDependency } from '../core/dependencyGraph';
+import path from 'path';
 // -----------------------------
 // Parses HTML string, extracts elements, applies rules
 // -----------------------------
@@ -22,15 +24,28 @@ export function parseHTML(code: string, filePath: string): Issue[] {
           value: string;
           location?: {
             startLine: number;
-            startCol: number;
+            startColumn: number;
             endLine: number;
-            endCol: number;
+            endColumn: number;
           };
         };
       } = {};
 
       if (Array.isArray(node.attrs)) {
         for (const attr of node.attrs) {
+          //tracking css selectors
+          //tracking css selectors
+          if (attr.name === 'class') {
+            const classNames = attr.value.split(/\s+/); //in case multiple
+            classNames.forEach((cls: any) => {
+              addSelectorUsage(`.${cls}`, filePath);
+            });
+          }
+          //tracking id selectors
+          if (attr.name === `id`) {
+            addSelectorUsage(`#${attr.value}`, filePath);
+          }
+
           if (attr.name !== 'style') {
             attributes[attr.name] = { value: attr.value };
           } else {
@@ -39,10 +54,11 @@ export function parseHTML(code: string, filePath: string): Issue[] {
 
             let values: String[] = value.split(';');
             let declarations: Declarations = {};
-            let addLineStart: number = 0;
+            let addLineStart: number = 7;
             const selector = node.tagName;
             const selectorLocation = node.sourceCodeLocation;
             const location = node.sourceCodeLocation?.attrs['style'];
+            console.log('style declarations locations: ', location);
             for (let i = 0; i < values.length - 1; i++) {
               const decPair: string[] = values[i].trim().split(':');
               const addLineEnd: number = decPair[0].length + decPair[1].length;
@@ -51,31 +67,47 @@ export function parseHTML(code: string, filePath: string): Issue[] {
                 startLine: location?.startLine,
                 endLine: location?.endLine,
                 startColumn: location?.startCol + addLineStart,
-                endColumn: location?.endCol + addLineStart + addLineEnd,
+                endColumn: location?.startCol + addLineStart + addLineEnd,
               };
               addLineStart += addLineEnd + 3;
             }
             cache.styles = {};
             cache.styles![selector] = {
               declarations: declarations,
-              startLine: selectorLocation.startLine,
-              endLine: selectorLocation.endLine,
-              startColumn: selectorLocation.startCol,
-              endColumn: selectorLocation.endCol,
+              startLine: selectorLocation.lineStart,
+              endLine: selectorLocation.lineEnd,
+              startColumn: selectorLocation.colStart,
+              endColumn: selectorLocation.colEnd,
             };
           }
         }
       }
+      // Track file dependencies
+      if (
+        cache.type === 'link' &&
+        attributes['rel']?.value === 'stylesheet' &&
+        attributes['href']
+      ) {
+        const href = attributes['href'].value;
+        const linkedFile = path.resolve(path.dirname(filePath), href);
+        addDependency(filePath, linkedFile);
+      }
 
+
+      if (cache.type === 'script' && attributes['src']) {
+        const src = attributes['src'].value;
+        const linkedFile = path.resolve(path.dirname(filePath), src);
+        addDependency(filePath, linkedFile);
+      }
       const attrLocs = node.sourceCodeLocation?.attrs;
       if (attrLocs) {
         for (const attrName in attrLocs) {
           if (attrLocs && attributes[attrName]) {
             attributes[attrName].location = {
               startLine: attrLocs[attrName].startLine,
-              startCol: attrLocs[attrName].startCol,
+              startColumn: attrLocs[attrName].startCol,
               endLine: attrLocs[attrName].endLine,
-              endCol: attrLocs[attrName].endCol,
+              endColumn: attrLocs[attrName].endCol,
             };
           }
         }
@@ -86,9 +118,9 @@ export function parseHTML(code: string, filePath: string): Issue[] {
       if (node.sourceCodeLocation) {
         cache.location = {
           startLine: node.sourceCodeLocation.startLine,
-          startCol: node.sourceCodeLocation.startCol,
+          startColumn: node.sourceCodeLocation.startCol,
           endLine: node.sourceCodeLocation.endLine,
-          endCol: node.sourceCodeLocation.endCol,
+          endColumn: node.sourceCodeLocation.endCol,
         };
       }
     }
@@ -98,7 +130,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
     // Recursively visit child nodes
     if (node.childNodes) {
       for (const child of node.childNodes) {
-        if (child.value) {
+        if (child.value && child.value.charAt(0) !== '\n') {
           cache.value = child.value;
         }
         extractElements(child, output);

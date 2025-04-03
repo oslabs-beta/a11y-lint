@@ -9,10 +9,10 @@ type Node = {
 };
 
 type Location = {
-  lineStart: number;
-  lineEnd: number;
-  colStart: number;
-  colEnd: number;
+  startLine: number;
+  endLine: number;
+  startColumn: number;
+  endColumn: number;
 };
 
 type Attribute = {

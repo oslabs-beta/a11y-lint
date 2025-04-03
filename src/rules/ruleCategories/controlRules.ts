@@ -6,10 +6,10 @@ const controlRules: { [key: string]: Function } = {};
 controlRules.descriptiveLinks = (parsedJsx: Node, issues: Issue[]): Issue[] => {
   if (!parsedJsx.value && parsedJsx.attributes.hasOwnProperty('href')) {
     issues.push({
-      line: parsedJsx.location.lineStart,
-      column: parsedJsx.location.colStart,
-      endLine: parsedJsx.location.lineEnd,
-      endColumn: parsedJsx.location.colEnd,
+      line: parsedJsx.location.startLine,
+      column: parsedJsx.location.startColumn,
+      endLine: parsedJsx.location.endLine,
+      endColumn: parsedJsx.location.endColumn,
       message: `Links should have clear descriptive text.`,
       fix: 'Please add text between <a> tags that describes the purpose of link.',
       severity: 'warning',
@@ -25,10 +25,10 @@ controlRules.useATag = (parsedJsx: Node, issues: Issue[]): Issue[] => {
 
   if (parsedJsx.value?.match(regex)) {
     issues.push({
-      line: parsedJsx.location.lineStart,
-      column: parsedJsx.location.colStart,
-      endLine: parsedJsx.location.lineEnd,
-      endColumn: parsedJsx.location.colEnd,
+      line: parsedJsx.location.startLine,
+      column: parsedJsx.location.startColumn,
+      endLine: parsedJsx.location.endLine,
+      endColumn: parsedJsx.location.endColumn,
       message: `Links should use <a> tag.`,
       fix: 'Please place hyperlink in <a> tags that describe the purpose of link.',
       severity: 'warning',
@@ -43,10 +43,10 @@ controlRules.useATag = (parsedJsx: Node, issues: Issue[]): Issue[] => {
         if (parsedJsx.attributes[obj].value.match(regex)) {
           {
             issues.push({
-              line: parsedJsx.attributes[obj].location.lineStart,
-              column: parsedJsx.attributes[obj].location.colStart,
-              endLine: parsedJsx.attributes[obj].location.lineEnd,
-              endColumn: parsedJsx.attributes[obj].location.colEnd,
+              line: parsedJsx.attributes[obj].location.startLine,
+              column: parsedJsx.attributes[obj].location.startColumn,
+              endLine: parsedJsx.attributes[obj].location.endLine,
+              endColumn: parsedJsx.attributes[obj].location.endColumn,
               message: `Links should use <a> tag.`,
               fix: 'Please place hyperlink in <a> tags that describe the purpose of link.',
               severity: 'warning',
@@ -60,12 +60,12 @@ controlRules.useATag = (parsedJsx: Node, issues: Issue[]): Issue[] => {
 };
 
 controlRules.useButtonTag = (parsedJsx: Node, issues: Issue[]): Issue[] => {
-  if (parsedJsx.attributes.type.value === 'button') {
+  if (parsedJsx.attributes.type.value && parsedJsx.attributes.type.value === 'button') {
     issues.push({
-      line: parsedJsx.attributes.type.location.lineStart,
-      column: parsedJsx.attributes.type.location.colStart - 1,
-      endLine: parsedJsx.attributes.type.location.lineEnd,
-      endColumn: parsedJsx.attributes.type.location.colEnd + 1,
+      line: parsedJsx.attributes.type.location.startLine,
+      column: parsedJsx.attributes.type.location.startColumn - 1,
+      endLine: parsedJsx.attributes.type.location.endLine,
+      endColumn: parsedJsx.attributes.type.location.endColumn + 1,
       message: `Buttons should use <button> tag.`,
       fix: 'Please replace <input type="button"> with <button> .',
       severity: 'warning',

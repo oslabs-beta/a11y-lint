@@ -9,10 +9,10 @@ imageRules.hasAltText = (parsedJsx: Node, issues: Issue[]): Issue[] => {
     if (!parsedJsx.attributes.hasOwnProperty('alt')) {
       //if not, push a missing altId issue
       issues.push({
-        line: parsedJsx.location.lineStart,
-        column: parsedJsx.location.colStart,
-        endLine: parsedJsx.location.lineEnd,
-        endColumn: parsedJsx.location.colEnd,
+        line: parsedJsx.location.startLine,
+        column: parsedJsx.location.startColumn,
+        endLine: parsedJsx.location.endLine,
+        endColumn: parsedJsx.location.endColumn,
         message: `Images should have alt ID.`,
         fix: 'Please add "alt" attribute. Decorative/nonfunctional images may use empty string as alt ID.',
         severity: 'warning',

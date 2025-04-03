@@ -6,6 +6,9 @@ function test() {
     <form>
     <input type='text'/>
     <input type='button'/>
+
+    <button className='fancy-button'></button>
+    
     </form>
       <p>1. Create accessbility linter</p>
       <p>2. Make Reddit joke from 2009</p>
@@ -14,9 +17,12 @@ function test() {
       <p style='font-size: 6px; color: blue; background-color:red;'>behold my beautiful tiny text</p>
       <table>
         <tr>
-          <td>Tables</td>
+          <th>Table header</th>
+          </tr>
+        <tr>
           <td>Stables</td>
           <td>Staples</td>
+          <td>Cables</td>
         </tr>
       </table>
     </div>

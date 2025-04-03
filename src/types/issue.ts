@@ -12,4 +12,5 @@ export interface Issue {
   message: string;
   severity?: 'warning' | 'error' | 'information';
   fix?: string;
+  selector?: string;
 }

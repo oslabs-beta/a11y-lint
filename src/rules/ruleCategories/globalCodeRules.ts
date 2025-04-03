@@ -8,9 +8,9 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
     if (node.type === 'html' && !node.attributes['lang']) {
       return {
         line: node.location?.startLine || 0,
-        column: node.location?.startCol,
+        column: node.location?.startColumn,
         endline: node.location?.endLine || 0,
-        endColumn: node.location?.endCol,
+        endColumn: node.location?.endColumn,
         message:
           '<html> tag is missing a "lang" attribute. See WCAG 3.1.1: https://www.w3.org/WAI/WCAG21/Understanding/language-of-page.html',
         severity: 'error',
@@ -53,26 +53,28 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
   //   return null;
   // },
   //************ Test image tag for missing alt attribute ****************/
-  missingAltAttr: (node) => {
-    if (node.type === 'img' && !node.attributes['alt']) {
-      return {
-        line: node.location?.startLine || 0,
-        column: node.location?.startCol,
-        endline: node.location?.endLine || 0,
-        endColumn: node.location?.endCol,
-        message: '<img> tag is missing an "alt" attribute. See WCAG 1.1.1: https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html',
-        severity: 'error',
-      };
-    }
-    return null;
-  },
+  
+  //running test from imageRules.ts instead!
+  // missingAltAttr: (node) => {
+  //   if (node.type === 'img' && !node.attributes['alt']) {
+  //     return {
+  //       line: node.location?.startLine || 0,
+  //       column: node.location?.startColumn,
+  //       endline: node.location?.endLine || 0,
+  //       endColumn: node.location?.endColumn,
+  //       message: '<img> tag is missing an "alt" attribute. See WCAG 1.1.1: https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html',
+  //       severity: 'error',
+  //     };
+  //   }
+  //   return null;
+  // },
   avoidAutofocus: (node) => {
     if (node.attributes['autofocus'] || node.attributes['autoFocus']) {
       return {
         line: node.location?.startLine || 0,
-        column: node.location?.startCol,
+        column: node.location?.startColumn,
         endline: node.location?.endLine || 0,
-        endColumn: node.location?.endCol,
+        endColumn: node.location?.endColumn,
         message: `Avoid using the 'autofocus' attribute. It can cause accessibility issues. See WCAG 2.2.2: https://www.w3.org/WAI/WCAG21/Understanding/pause-stop-hide.html`,
         severity: 'warning',
         fix: `Remove the 'autofocus' attribute and let users control focus.`,
@@ -91,9 +93,9 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
       ) {
         return {
           line: node.location?.startLine || 0,
-          column: node.location?.startCol,
+          column: node.location?.startColumn,
           endline: node.location?.endLine || 0,
-          endColumn: node.location?.endCol,
+          endColumn: node.location?.endColumn,
           message: `Avoid disabling zoom. Users may need to resize text.`,
           severity: 'warning',
           fix: `Remove maximum-scale=1 and user-scalable=no`,

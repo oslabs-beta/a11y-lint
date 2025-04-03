@@ -7,17 +7,17 @@ export type HtmlExtractedNode = {
       value: String;
       location?: {
         startLine: number;
-        startCol: number;
+        startColumn: number;
         endLine: number;
-        endCol: number;
+        endColumn: number;
       };
     };
   };
   location?: {
     startLine: number;
-    startCol: number;
+    startColumn: number;
     endLine: number;
-    endCol: number;
+    endColumn: number;
   };
   value?: string;
   styles?: CssSelectorObj;

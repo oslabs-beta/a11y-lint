@@ -26,6 +26,8 @@ import postcss from 'postcss';
 import { CssSelectorObj } from '../types/css';
 import { cssRulesFromObject } from '../rules/cssRules';
 import { Issue } from '../types/issue';
+import { registerSelectorDeclarations } from '../core/dependencyGraph';
+import { splitSelector } from '../core/splitSelector';
 
 export function parseCSS(code: string, filePath: string): Issue[] {
   console.log('parseCSS fucntion reached 🥩');
@@ -47,6 +49,12 @@ export function parseCSS(code: string, filePath: string): Issue[] {
         endLine: rule.source!.end!.line,
         endColumn: rule.source!.end!.column,
       };
+
+      //we add this to the selector decs - first we have to split it
+      const parts = splitSelector(selector);
+      for (const part of parts) {
+        registerSelectorDeclarations(part, outputObj[selector]);
+      }
     }
     //console.log(outputObj)
     //walkDecls is a method of postCSS that goes through each Declaration (attribute)
