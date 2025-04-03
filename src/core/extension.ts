@@ -50,7 +50,6 @@ async function preloadAllFiles(diagnostics: vscode.DiagnosticCollection) {
       console.warn(`⚠️ Failed to parse ${filePath}`, err);
     }
   }
-
   //console.log('✅ Finished preloading dependency graph');
 }
 
@@ -61,8 +60,8 @@ export async function activate(context: vscode.ExtensionContext) {
   await preloadAllFiles(diagnostics);
 
   context.subscriptions.push(
-    vscode.workspace.onDidSaveTextDocument((document) => {
-      const filePath = document.fileName;
+    vscode.workspace.onDidChangeTextDocument((document) => {
+      const filePath = document.document.fileName;
       //console.log(`📁 Saved file: ${filePath}`);
       //we create a set and add the current file being saved
       const allToLint = new Set<string>();

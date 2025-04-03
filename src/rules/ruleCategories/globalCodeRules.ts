@@ -13,7 +13,7 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
         endColumn: node.location?.endColumn,
         message:
           '<html> tag is missing a "lang" attribute. See WCAG 3.1.1: https://www.w3.org/WAI/WCAG21/Understanding/language-of-page.html',
-        severity: 'error',
+        severity: 'warning',
       };
     }
     return null;
