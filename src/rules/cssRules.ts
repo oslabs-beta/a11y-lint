@@ -10,6 +10,7 @@ import { CssSelectorObj } from '../types/css';
 import appearanceRules from './ruleCategories/appearanceRules';
 import contrastRules from './ruleCategories/contrastRules';
 import keyboardRules from './ruleCategories/keyboardRules';
+import { parse } from 'path';
 
 // step 4- loops through the parsed CSS and applies our rules to them, if something fails, it creates an issue
 export function cssRulesFromObject(
@@ -33,12 +34,18 @@ export function cssRulesFromObject(
     //must have visible focus styles
     keyboardRules.checkVisibleFocusStyle(selector, parsedCSS[selector], issues);
     //if an element is interactive it needs focus styling
-    // keyboardRules.checkMissingFocusStyles(
-    //   selector,
-    //   parsedCSS[selector],
-    //   issues,
-    //   focusSelectors
-    // );
+  //   const focusSelectors = new Set(
+  //     Object.keys(parsedCSS).filter((select) => {
+  //       return select.includes(':focus');
+  //     })
+  //   );
+
+    keyboardRules.checkMissingFocusStyles(
+      selector,
+      parsedCSS[selector],
+      issues,
+      Object.keys(parsedCSS)
+    );
   }
   return issues;
 }

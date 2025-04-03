@@ -64,7 +64,6 @@ async function preloadAllFiles(diagnostics: vscode.DiagnosticCollection) {
       console.warn(`⚠️ Failed to parse ${filePath}`, err);
     }
   }
-
   //console.log('✅ Finished preloading dependency graph');
 }
 
@@ -78,10 +77,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
   //event lsitener that is listening for onsave essentially.  Also when extention is turned off or deactived this will delete allt he diagnostics so they arent saved in memory
   context.subscriptions.push(
-    //when file you are on is saved run this function and pass in the current document(file) you are on
-    vscode.workspace.onDidSaveTextDocument((document) => {
-      //file path is equal to the name of the file you are currently on
-      const filePath = document.fileName;
+    vscode.workspace.onDidChangeTextDocument((document) => {
+      const filePath = document.document.fileName;
       //console.log(`📁 Saved file: ${filePath}`);
       //we create a set and add the current file being saved
       const allToLint = new Set<string>();
