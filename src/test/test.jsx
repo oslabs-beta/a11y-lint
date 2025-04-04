@@ -2,7 +2,9 @@ function test() {
   return (
     <div>
       <p>Please go to my website: www.evilwebsite.org</p>
+
       <img src='url' />
+      
     <form>
     <input type='text'/>
     <input type='button'/>

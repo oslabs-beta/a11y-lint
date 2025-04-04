@@ -2,25 +2,7 @@
 // FILE: src/parsers/cssParser.ts
 // DESCRIPTION: Uses PostCSS to parse CSS files and applies CSS-specific rules.
 // -----------------------------
-/*
-import { cssRulesFromObject } from '../rules/cssRules';
-import { ParsedCSS } from '../types/css';
-import { Issue } from '../types/issue';
 
-// step 3 - parses code and calls the rules
-export function parseCSS(code: string, filePath: string): Issue[] {
-  const parsed: ParsedCSS = {
-    body: {
-      'font-size': {
-        value: '9px',
-        start: { line: 2, column: 2 },
-        end: { line: 2, column: 18 },
-      },
-    },
-  };
-  return cssRulesFromObject(parsed, filePath);
-}
-*/
 import * as vscode from 'vscode';
 import postcss from 'postcss';
 import { CssSelectorObj } from '../types/css';

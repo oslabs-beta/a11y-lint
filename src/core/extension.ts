@@ -78,14 +78,16 @@ export async function activate(context: vscode.ExtensionContext) {
   //event lsitener that is listening for onsave essentially.  Also when extention is turned off or deactived this will delete allt he diagnostics so they arent saved in memory
   context.subscriptions.push(
     vscode.workspace.onDidChangeTextDocument((document) => {
+      //filepath is name of file you are currently on
       const filePath = document.document.fileName;
       //console.log(`📁 Saved file: ${filePath}`);
       //we create a set and add the current file being saved
       const allToLint = new Set<string>();
       allToLint.add(filePath);
 
-      //* below function can be found in dependecyGraph.ts file
-      //first we get the dependents of the file and add them to our set
+      //* BELOW FUNCTION CAN BE FOUND ON LINE 27 IN DEPENDANCYGRAPH.TS
+      //first we get the dependents of the file and add them to our set.
+      //for each dependant we add it to out Set
       getAllDependents(filePath).forEach((dep) => allToLint.add(dep));
       //then console log out what we are going to lint
       // console.log(
@@ -93,26 +95,37 @@ export async function activate(context: vscode.ExtensionContext) {
       //   Array.from(getAllDependents(filePath))
       // );
 
-      // step 2: if its a CSS file relint all files using its selectors
-      // at some point we need to work on the nested components and stuff
+      //! at some point we need to work on the nested components and stuff
+      // if its a CSS file relint all files using its selectors
       if (filePath.endsWith('.css')) {
+        //code is going to be equal to a string of all the code in the .css file
         const code = fs.readFileSync(filePath, 'utf-8');
+        //selectors are equal to the invokation of the extract function passing in the .css file string,  this will return an array of string types
+        //* BELOW FUNCTION CNA BE FOUND ON LINE 18
         const selectors = extractCssSelectors(code);
         //console.log('🎯 Extracted selectors:', selectors);
-
+        //iterate over each element in the array
         for (const selector of selectors) {
+          //* BELOW FUNCTION CAN BE FOUND ON LINE 108 IN DEPENDECYGRAPH.TS FILE
+          //will be an object that has all the files that use the passed in selector
           const files = getFilesForSelector(selector);
+          //for each file this will add them to the allToLint set to be linted
           files.forEach((f) => allToLint.add(f));
         }
       }
       //console.log('🌀 Re-linting these files:', Array.from(allToLint));
 
-      // step 3: relint all affected files and update diagnostics
+      //iterate over each file in tthe allToLint Set
       for (const file of allToLint) {
         try {
           console.log(`🚨 Linting file: ${file}`);
+          //define issues as invocartion of lintDocument on eahc file
+          //* BELOW FUNCTION CAN BE FOUND ON LINE 12 OF LINTER.TS FILE
           const issues = lintDocument(file);
+          //issues array contains all issues with associated locations of issues.  This array is passed into toDiagnostics which will convert them to diagnostics that VSCode can populate the program with location problems and problem window.
+          //* BELOW FUNCTION CAN BE FOUND ON LINE 10 OF DIAGNOSTICS.TS FILE
           const result = toDiagnostics(issues);
+          //built in VS code method that will populate VS Code files with location problems and problem window.
           diagnostics.set(vscode.Uri.file(file), result);
         } catch (err) {
           console.error(`❌ Error linting ${file}:`, err);

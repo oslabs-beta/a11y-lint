@@ -1,32 +1,41 @@
 import * as path from 'path';
 import { SelectorBlock } from '../types/css';
 
-//dependecy graph will be an object 
+//dependecy graph will be an object where the keys are strings(filepathes) and the values are a set of strings that reprent the files that depend on that file
 const dependencyGraph = new Map<string, Set<string>>();
 
 // i guess we have to normalize file paths to avoid mismatch errors ?????
 const normalize = (p: string) => path.resolve(p);
 
-// when a file imports another one this would be called
+// when a file imports another one this would be called fromFile is the file you are on that is doing the importing, toFile is the file being imported
 export function addDependency(fromFile: string, toFile: string) {
+  //dependent is the file doing the importing
   const dependent = normalize(fromFile);
+  //dependency is the file being imported
   const dependency = normalize(toFile);
-
+// run a check to see if the dependency graph doesnt have the filepath of the file you are currentyl on
   if (!dependencyGraph.has(dependency)) {
+    //if it doesnt have the filepath then it will add the filepath as a key(dependecy) and a new Set as its value
     dependencyGraph.set(dependency, new Set());
   }
-
+  //this is going to add to the dependency graph dependency as a key and have dependent be the value
   dependencyGraph.get(dependency)!.add(dependent);
 }
 
-// when file is saved it gets files tht depend on it
+//* this is the function that is being called in activate function
+// when file is saved this file will get all the files that depend on it.
 export function getAllDependents(targetFile: string): Set<string> {
+  //normalizedTarget is going resolve the paths to avoid mismatch file errors
   const normalizedTarget = path.resolve(targetFile);
+  //result will be an object of file paths
   const result = new Set<string>();
-
+//  iterate over the dependecy graph key value pairs
   for (const [dependency, dependents] of dependencyGraph.entries()) {
+    //if the file being imported (dependancy) is equal to the passed in file (normalizedTarget)
     if (dependency === normalizedTarget) {
+      //then iterate over all the elements of the denpendents
       for (const dependent of dependents) {
+        //add those dependents to the result object
         result.add(dependent);
       }
     }
@@ -35,6 +44,7 @@ export function getAllDependents(targetFile: string): Set<string> {
   return result;
 }
 
+//! IS THIS FUNCTION BEING USED?
 export function getDependencies(filePath: string): Set<string> {
   const normalizedPath = path.resolve(filePath);
   const result = new Set<string>();
@@ -48,6 +58,7 @@ export function getDependencies(filePath: string): Set<string> {
   return result;
 }
 
+//! IS THIS FUNCTION BEING USED?
 // logs whole dependencyGraph
 export function logDependencyGraph() {
   console.log('🚀 A11Y Dependency Graph:\n');
@@ -57,11 +68,11 @@ export function logDependencyGraph() {
   }
 }
 
-// Selector Dependency Graph
-// Tracks classes and ids
-
+// Selector Dependency Graph Tracks classes and ids and their assosiated files.  the key is the slector and the value is the file
 const selectorGraph = new Map<string, Set<string>>();
 
+
+//! IS THIS FUNCTION BEING USED?
 /*
  * Track where a id or class is used
  * selector - CSS selector
@@ -77,6 +88,7 @@ export function addSelectorUsage(selector: string, filePath: string) {
   selectorGraph.get(selector)!.add(file);
 }
 
+//! IS THIS FUNCTION BEING USED?
 /*
  * Track where a selector is defined
  * selector - CSS selector
@@ -92,13 +104,11 @@ export function addSelectorDefinition(selector: string, filePath: string) {
   selectorGraph.get(selector)!.add(file);
 }
 
-/*
- * Get all files related to a selector
- * files that use the selector or define it
- */
+//Get all files related to a selector that use the selector or define it. Checking which files use the selector.
 export function getFilesForSelector(selector: string): Set<string> {
   return selectorGraph.get(selector) || new Set();
 }
+
 /*
  * Selector Style Registry - Stores declarations
  */
