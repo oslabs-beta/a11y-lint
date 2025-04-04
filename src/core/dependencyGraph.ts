@@ -56,6 +56,26 @@ export function logDependencyGraph() {
   }
 }
 
+//Class-Tag Graph
+//tracks which HTML tags classes/IDs are associated with
+const classTagGraph = new Map<string, string>();
+
+export function addClassTagPair(className: string, tag: string): void{
+  if (!classTagGraph.has(className)){
+    classTagGraph.set(className, tag)
+  }
+};
+
+export function getClassTagPair(className: string): string | undefined{
+
+  let results = undefined;
+
+  if (classTagGraph.get(className)){
+    results = classTagGraph.get(className);
+  }
+  return results;
+}
+
 // Selector Dependency Graph
 // Tracks classes and ids
 
