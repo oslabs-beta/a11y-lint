@@ -1,7 +1,7 @@
 import { parse } from 'parse5';
 import { htmlRules } from '../rules/htmlRules';
 import { Issue } from '../types/issue';
-import { HtmlExtractedNode } from '../types/html';
+import { HtmlExtractedNode, MyTreeNode } from '../types/html';
 import { Declarations, CssSelectorObj } from '../types/css';
 import { addSelectorUsage, addDependency } from '../core/dependencyGraph';
 import path from 'path';
@@ -10,6 +10,7 @@ import path from 'path';
 // -----------------------------
 export function parseHTML(code: string, filePath: string): Issue[] {
   const document = parse(code, { sourceCodeLocationInfo: true });
+  console.log('HTML docuemnt: ', document);
   const extractElements = (
     node: any,
     output: HtmlExtractedNode[] = []
@@ -93,7 +94,6 @@ export function parseHTML(code: string, filePath: string): Issue[] {
         addDependency(filePath, linkedFile);
       }
 
-
       if (cache.type === 'script' && attributes['src']) {
         const src = attributes['src'].value;
         const linkedFile = path.resolve(path.dirname(filePath), src);
@@ -136,11 +136,51 @@ export function parseHTML(code: string, filePath: string): Issue[] {
         extractElements(child, output);
       }
     }
-    
+
     return output;
   };
 
   const htmlElements = extractElements(document);
-  console.log(htmlElements);
+  console.log('HTML Elements ', htmlElements);
   return htmlRules(htmlElements, filePath);
 }
+
+type outputObj = {
+  [key: string]: string[];
+};
+export function createParentChildObj(code: string, filePath: string) {
+  const document = parse(code, { sourceCodeLocationInfo: true });
+  const outputObj: outputObj = {};
+
+  function traverse(node: MyTreeNode, parentKey: string | null) {
+    let currentKey: string;
+    if ('tagName' in node && node.tagName) {
+      // Use tagName + source code location to make key more unique
+      const location = node.sourceCodeLocation?.startLine ?? 0;
+      currentKey = `<${node.tagName}>`;
+    } else {
+      currentKey = node.nodeName;
+    }
+
+    if (parentKey) {
+      if (!outputObj[parentKey]) {
+        outputObj[parentKey] = [];
+      }
+      outputObj[parentKey].push(currentKey);
+    }
+
+    if ('childNodes' in node && node.childNodes) {
+      for (const child of node.childNodes) {
+        traverse(child, currentKey);
+      }
+    }
+    if (document.childNodes) {
+      for (const child of document.childNodes) {
+        traverse(child, "ROOT");
+      }
+    }
+  }
+  console.log('ParentChild Object: ', outputObj);
+  return outputObj;
+}
+

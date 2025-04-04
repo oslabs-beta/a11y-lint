@@ -22,3 +22,23 @@ export type HtmlExtractedNode = {
   value?: string;
   styles?: CssSelectorObj;
 };
+
+export interface MyTreeNode {
+  nodeName: string;
+  tagName?: string;
+  attrs?: { name: string; value: string }[];
+  childNodes?: MyTreeNode[];
+  content?: MyTreeNode;
+  parentNode?: MyTreeNode; // optional if you’re adding this
+  value?: string; // for text nodes
+  sourceCodeLocation?: {
+    attrs?: any;
+    startLine: number;
+    endLine: number;
+    startCol: number;
+    endCol: number;
+    startOffset: number;
+    endOffset: number;
+    rndTag: any;
+  };
+}

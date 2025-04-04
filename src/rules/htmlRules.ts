@@ -30,7 +30,7 @@ export function htmlRules(
     for (const ruleKey in allRules) {
       const ruleFn = allRules[ruleKey];
       const issue = ruleFn(node);
-      console.log(allRules);
+      //console.log(allRules);
       if (issue) {
         issues.push(issue);
       }
