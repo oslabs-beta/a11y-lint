@@ -32,32 +32,25 @@ tableRules.hasHeaders = (
   parsedSlice: Node[],
   issues: Issue[]
 ): Issue[] => {
-  console.log('tableRules.hasHeaders slice: ', parsedSlice);
   let tdCount = 0;
   let thCount = 0;
   let i = 0;
-  console.log('entering while loop to find first td');
   //traverses array to until we find the first data entry in the table
   while (i < parsedSlice.length && parsedSlice[i].type !== "td") {
     i++;
   }
-  console.log('first td index: ', i);
   //counts how many entries there are in that cluster, should be consistent for each row
-  console.log('entering while loop to count td tags');
   while (i < parsedSlice.length && parsedSlice[i].type === "td") {
     tdCount++;
     //increment by two because there will be two td tags per entry: one opening and one closing
     i++;
   }
-  console.log('td count: ', tdCount);
   //reset count so we can look for headers
   i = 0;
 
-  console.log('entering while loop to find first th')
   while (i < parsedSlice.length && parsedSlice[i].type !== "th") {
     i++;
   }
-  console.log('entering while loop to count th tags');
   //now we'll count how many headers there are
   while (i < parsedSlice.length && parsedSlice[i].type === "th") {
     thCount++;
