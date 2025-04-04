@@ -24,16 +24,7 @@ export function cssRulesFromObject(
   //looping through parsedCSS
   console.log(parsedCSS);
   for (const selector in parsedCSS) {
-        //must have visible focus styles
-        keyboardRules.checkVisibleFocusStyle(selector, parsedCSS[selector], issues);
-        keyboardRules.checkMissingFocusStyles(
-          selector,
-          parsedCSS[selector],
-          issues,
-          Object.keys(parsedCSS)
-        );
         let testSelector: string = selector;
-
         //lets us test class and ID selectors as the tag they're attached to
         if (selector.charAt(0) === '.' || selector.charAt(0) === '#'){
           testSelector = getClassTagPair(selector)!;
@@ -46,6 +37,15 @@ export function cssRulesFromObject(
     contrastRules.checkContrast(testSelector, declarations, issues);
     //must have 200% scalable font
     appearanceRules.textSize200(testSelector, declarations, issues);
+    //must have visible focus styles
+    keyboardRules.checkVisibleFocusStyle(selector, parsedCSS[selector], issues);
+    keyboardRules.checkMissingFocusStyles(
+              selector,
+              testSelector,
+              parsedCSS[selector],
+              issues,
+              Object.keys(parsedCSS)
+            );
 
   }
   return issues;
