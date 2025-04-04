@@ -11,33 +11,19 @@ import { lintDocument } from './linter';
 import { toDiagnostics } from './diagnostic';
 import { getAllDependents, getFilesForSelector } from './dependencyGraph';
 
-//this is for getting the selectors so we know what files need to be linted
-// formats so (.btn:hover, #nav .link) is just .btn or #nav
-function extractCssSelectors(code: string): string[] {
-  const selectors: string[] = [];
-  const root = postcss.parse(code);
-
-  root.walkRules((rule) => {
-    rule.selector
-      .split(',')
-      .map((s) => s.trim().split(/\s|:/)[0])
-      .forEach((sel) => {
-        if (sel.startsWith('.') || sel.startsWith('#')) {
-          selectors.push(sel);
-        }
-      });
-  });
-
-  return selectors;
-}
-
 //here we are going to lint every file so we get all of our dependencies mapped out
 //this way we dont have to save a file in a correct order to get the maps
 async function preloadAllFiles(diagnostics: vscode.DiagnosticCollection) {
+  const folder = vscode.workspace.workspaceFolders?.[0];
+  if (!folder) {
+    return;
+  }
+
   const files = await vscode.workspace.findFiles(
-    '**/*.{js,jsx,ts,tsx,html,css}',
+    new vscode.RelativePattern(folder, '**/*.{js,jsx,ts,tsx,html,css}'),
     '**/node_modules/**'
   );
+
   //console.log(`🗂 Preloading ${files.length} files...`);
 
   for (const file of files) {
@@ -78,15 +64,12 @@ export async function activate(context: vscode.ExtensionContext) {
       // step 2: if its a CSS file relint all files using its selectors
       // at some point we need to work on the nested components and stuff
       if (filePath.endsWith('.css')) {
-        const code = fs.readFileSync(filePath, 'utf-8');
-        const selectors = extractCssSelectors(code);
-        //console.log('🎯 Extracted selectors:', selectors);
-
-        for (const selector of selectors) {
-          const files = getFilesForSelector(selector);
-          files.forEach((f) => allToLint.add(f));
-        }
+        const relatedFiles = getAllDependents(filePath);
+        relatedFiles.forEach((f) => allToLint.add(f));
+        const selectorUsers = getFilesForSelector(filePath);
+        selectorUsers.forEach((f) => allToLint.add(f));
       }
+
       //console.log('🌀 Re-linting these files:', Array.from(allToLint));
 
       // step 3: relint all affected files and update diagnostics
@@ -105,4 +88,3 @@ export async function activate(context: vscode.ExtensionContext) {
 
   console.log('🥶 A11yLint is now active');
 }
-
