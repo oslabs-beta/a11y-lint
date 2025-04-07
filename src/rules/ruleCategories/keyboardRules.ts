@@ -66,7 +66,6 @@ keyboardRules.checkMissingFocusStyles = (
   objValues: string[]
 ) => {
   const focusSelectors: {[k: string]: boolean} = {};
-  console.log('initial objValues: ', objValues);
   for (let i = 0; i<objValues.length; i++){
     if (objValues[i].includes(':focus')){
       const temp = objValues[i].replace(':focus', '');
@@ -74,8 +73,6 @@ keyboardRules.checkMissingFocusStyles = (
       // console.log('new focusSelectors: ', focusSelectors);
     }
   }
-
-  console.log('focusSelectors: ', focusSelectors);
 
   const baseSelector = selector.trim();
   const isInteractable = {button: true, a: true, input: true, summary: true, textarea: true, select: true}

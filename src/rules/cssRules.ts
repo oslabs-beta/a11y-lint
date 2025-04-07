@@ -22,7 +22,6 @@ export function cssRulesFromObject(
   console.log('cssRules function reached ❄️');
   //create issues array
   //looping through parsedCSS
-  console.log(parsedCSS);
   for (const selector in parsedCSS) {
         let testSelector: string = selector;
         //lets us test class and ID selectors as the tag they're attached to

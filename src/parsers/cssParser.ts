@@ -2,25 +2,7 @@
 // FILE: src/parsers/cssParser.ts
 // DESCRIPTION: Uses PostCSS to parse CSS files and applies CSS-specific rules.
 // -----------------------------
-/*
-import { cssRulesFromObject } from '../rules/cssRules';
-import { ParsedCSS } from '../types/css';
-import { Issue } from '../types/issue';
 
-// step 3 - parses code and calls the rules
-export function parseCSS(code: string, filePath: string): Issue[] {
-  const parsed: ParsedCSS = {
-    body: {
-      'font-size': {
-        value: '9px',
-        start: { line: 2, column: 2 },
-        end: { line: 2, column: 18 },
-      },
-    },
-  };
-  return cssRulesFromObject(parsed, filePath);
-}
-*/
 import * as vscode from 'vscode';
 import postcss from 'postcss';
 import { CssSelectorObj } from '../types/css';
@@ -29,14 +11,23 @@ import { Issue } from '../types/issue';
 import {
   registerSelectorDeclarations,
   addSelectorDefinition,
+  tailwindToggle,
 } from '../core/dependencyGraph';
 import { splitSelector } from '../core/splitSelector';
 
 export function parseCSS(code: string, filePath: string): Issue[] {
-  console.log('parseCSS fucntion reached 🥩');
+  console.log('parseCSS function reached 🥩');
   const root = postcss.parse(code);
   //empty object I will be storing information in
   const outputObj: CssSelectorObj = {};
+
+  root.walkAtRules((atRule) => {
+    console.log('atRule! ', atRule);
+    if (atRule.name === 'import' && atRule.params.includes('tailwindcss')){
+      console.log('this bad boy is in tailwind!');
+      tailwindToggle();
+    }
+  })
 
   //method walk Rules is built in method of postcss.  walk Rules in AST esetially goes to each node of a certain type which is "rules" and in this case rules are each tag (i.e. <button> <h1> <div>)
   root.walkRules((rule) => {

@@ -34,6 +34,17 @@ export function getAllDependents(targetFile: string): Set<string> {
   return result;
 }
 
+//tracking if file uses TW or not
+let tailwind: boolean = false;
+
+export function tailwindToggle(): void {
+  tailwind = !tailwind;
+}
+
+export function isTailwind(): boolean{
+  return tailwind;
+}
+
 export function getDependencies(filePath: string): Set<string> {
   const normalizedPath = path.resolve(filePath);
   const result = new Set<string>();

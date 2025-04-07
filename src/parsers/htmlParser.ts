@@ -1,13 +1,18 @@
 import { parse } from 'parse5';
 import { htmlRules } from '../rules/htmlRules';
 import { Issue } from '../types/issue';
+import { Location } from '../types/jsx';
 import { HtmlExtractedNode } from '../types/html';
 import { Declarations, CssSelectorObj } from '../types/css';
-import { addSelectorUsage, addDependency } from '../core/dependencyGraph';
+import { addSelectorUsage, addDependency, addClassTagPair } from '../core/dependencyGraph';
+import { isTailwind } from '../core/dependencyGraph';
+import { tailwindParser } from '../parsers/tailwindParser';
 import path from 'path';
 // -----------------------------
 // Parses HTML string, extracts elements, applies rules
 // -----------------------------
+let tailwindIssues: Issue[] =[];
+
 export function parseHTML(code: string, filePath: string): Issue[] {
   const document = parse(code, { sourceCodeLocationInfo: true });
   const extractElements = (
@@ -15,6 +20,8 @@ export function parseHTML(code: string, filePath: string): Issue[] {
     output: HtmlExtractedNode[] = []
   ): HtmlExtractedNode[] => {
     const cache: Partial<HtmlExtractedNode> = {};
+
+    tailwindIssues =[];
 
     if (node.tagName) {
       cache.type = node.tagName;
@@ -35,15 +42,28 @@ export function parseHTML(code: string, filePath: string): Issue[] {
         for (const attr of node.attrs) {
           //tracking css selectors
           //tracking css selectors
-          if (attr.name === 'class') {
+          if (attr.name === 'class' && !isTailwind()) {
             const classNames = attr.value.split(/\s+/); //in case multiple
             classNames.forEach((cls: any) => {
               addSelectorUsage(`.${cls}`, filePath);
+              addClassTagPair(`.${cls}`, node.tagName);
             });
+          }
+          if (attr.name === 'class' && isTailwind()){
+            //unfortunately you have to format code with the whole tag for the TW-to-CSS parser to work
+            const codeString: string = String(attr.value);
+            const location: Location = node.sourceCodeLocation?.attrs['class'];
+            console.log('here is what we are feeding to the tailwind parser: ');
+            console.log(codeString)
+            tailwindParser(String(codeString), node.tagName, location, tailwindIssues).then((results) => {
+              tailwindIssues = results;
+            });
+            console.log('new tailwindIssues: ', tailwindIssues);
           }
           //tracking id selectors
           if (attr.name === `id`) {
             addSelectorUsage(`#${attr.value}`, filePath);
+            addClassTagPair(`#${attr.value}`, node.tagName);
           }
 
           if (attr.name !== 'style') {
@@ -142,5 +162,5 @@ export function parseHTML(code: string, filePath: string): Issue[] {
 
   const htmlElements = extractElements(document);
   console.log(htmlElements);
-  return htmlRules(htmlElements, filePath);
+  return htmlRules(htmlElements, filePath).concat(tailwindIssues);
 }

@@ -7,6 +7,7 @@ import { HtmlExtractedNode } from '../types/html';
 import { CssSelectorObj } from '../types/css';
 import { getSelectorDeclarations } from '../core/dependencyGraph';
 import { splitSelector } from '../core/splitSelector';
+import { isTailwind } from '../core/dependencyGraph';
 
 import globalCodeRules from './ruleCategories/globalCodeRules';
 import imageRules from './ruleCategories/imageRules';
@@ -30,7 +31,6 @@ export function htmlRules(
     for (const ruleKey in allRules) {
       const ruleFn = allRules[ruleKey];
       const issue = ruleFn(node);
-      console.log(allRules);
       if (issue) {
         issues.push(issue);
       }
@@ -48,7 +48,7 @@ export function htmlRules(
       endColumn: node.location?.endColumn || 0,
     };
 
-    if (attrs.class) {
+    if (attrs.class && !isTailwind()) {
       attrs.class.value.split(/\s+/).forEach((cls) => {
         const selector = `.${cls}`;
         const declarationsFromCss = getSelectorDeclarations(selector); // get real CSS info

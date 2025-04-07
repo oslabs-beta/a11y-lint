@@ -79,11 +79,8 @@ export function parseJSX(code: string, filePath: string): Issue[] {
             };
         }}}
        else if (
-        //should we update this to just be JSXOpeningElement? do we want closing elements too?
         path.node.type === 'JSXOpeningElement'
       ) {
-        // console.log(path.node.name);
-        // console.log(path.node.loc);
         results.push({
           type: path.node.name.name,
           location: {
@@ -98,24 +95,9 @@ export function parseJSX(code: string, filePath: string): Issue[] {
         path.node.type === 'JSXText' &&
         path.node.value.charAt(0) !== '\n'
       ) {
-        // console.log(path.node.value);
-        // const name = 'text';
         results[results.length - 1].value = String(path.node.value);
         results[results.length-1].location.endLine = path.node.loc?.end.line || 0;
         results[results.length-1].location.endColumn = path.node.loc?.end.column || 0;
-        // results[results.length - 1].attributes[name] = {
-        //   value: value,
-        //   location: {
-        //     lineStart: Number(path.node.loc?.start.line),
-        //     lineEnd: Number(path.node.loc?.end.line),
-        //     colStart: Number(path.node.loc?.start.column),
-        //     colEnd: Number(path.node.loc?.end.column),
-        //   },
-        // };
-        // results[results.length - 1].attributes.push({
-        //   name: 'text',
-        //   value: path.node.value,
-        // });
 
         //adding file dependency
       } else if (path.node.type === 'ImportDeclaration') {
