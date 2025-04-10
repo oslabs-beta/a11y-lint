@@ -145,42 +145,42 @@ export function parseHTML(code: string, filePath: string): Issue[] {
   return htmlRules(htmlElements, filePath);
 }
 
-type outputObj = {
-  [key: string]: string[];
-};
-export function createParentChildObj(code: string, filePath: string) {
-  const document = parse(code, { sourceCodeLocationInfo: true });
-  const outputObj: outputObj = {};
+// type outputObj = {
+//   [key: string]: string[];
+// };
+// export function createParentChildObj(code: string, filePath: string) {
+//   const document = parse(code, { sourceCodeLocationInfo: true });
+//   const outputObj: outputObj = {};
 
-  function traverse(node: MyTreeNode, parentKey: string | null) {
-    let currentKey: string;
-    if ('tagName' in node && node.tagName) {
-      // Use tagName + source code location to make key more unique
-      const location = node.sourceCodeLocation?.startLine ?? 0;
-      currentKey = `<${node.tagName}>`;
-    } else {
-      currentKey = node.nodeName;
-    }
+//   function traverse(node: MyTreeNode, parentKey: string | null) {
+//     let currentKey: string;
+//     if ('tagName' in node && node.tagName) {
+//       // Use tagName + source code location to make key more unique
+//       const location = node.sourceCodeLocation?.startLine ?? 0;
+//       currentKey = `<${node.tagName}>`;
+//     } else {
+//       currentKey = node.nodeName;
+//     }
 
-    if (parentKey) {
-      if (!outputObj[parentKey]) {
-        outputObj[parentKey] = [];
-      }
-      outputObj[parentKey].push(currentKey);
-    }
+//     if (parentKey) {
+//       if (!outputObj[parentKey]) {
+//         outputObj[parentKey] = [];
+//       }
+//       outputObj[parentKey].push(currentKey);
+//     }
 
-    if ('childNodes' in node && node.childNodes) {
-      for (const child of node.childNodes) {
-        traverse(child, currentKey);
-      }
-    }
-    if (document.childNodes) {
-      for (const child of document.childNodes) {
-        traverse(child, "ROOT");
-      }
-    }
-  }
-  console.log('ParentChild Object: ', outputObj);
-  return outputObj;
-}
+//     if ('childNodes' in node && node.childNodes) {
+//       for (const child of node.childNodes) {
+//         traverse(child, currentKey);
+//       }
+//     }
+//     if (document.childNodes) {
+//       for (const child of document.childNodes) {
+//         traverse(child, "ROOT");
+//       }
+//     }
+//   }
+//   console.log('ParentChild Object: ', outputObj);
+//   return outputObj;
+// }
 
