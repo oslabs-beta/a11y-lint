@@ -7,6 +7,7 @@
 import { parseJSX } from './jsxParser';
 import { parseHTML } from './htmlParser';
 import { parseCSS } from './cssParser';
+import { parseSCSS } from './scssParser';
 
 // step 2 - sends the code and file type to the appropriate parser
 export function parseByType(code: string, filePath: string) {
@@ -18,11 +19,14 @@ export function parseByType(code: string, filePath: string) {
     console.log('➡️ Routing to parseHTML');
     //createParentChildObj(code, filePath);
     return parseHTML(code, filePath);
-
   }
   if (filePath.endsWith('.css')) {
     console.log('➡️ Routing to parseCSS');
     return parseCSS(code, filePath);
+  }
+  if (filePath.endsWith('.scss')) {
+    console.log('Routing to parse scss');
+    return parseSCSS(code, filePath);
   }
   return [];
 }

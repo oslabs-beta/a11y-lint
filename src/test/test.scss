@@ -1,0 +1,10 @@
+$primary: #333;
+
+.button {
+  color: $primary;
+  padding: 1rem;
+
+  &:hover {
+    color: lighten($primary, 10%);
+  }
+}
