@@ -8,3 +8,8 @@ $primary: #333;
     color: lighten($primary, 10%);
   }
 }
+
+.a{
+  color: red;
+  background-color: $primary;
+}
