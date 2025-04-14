@@ -1,6 +1,5 @@
 import { Issue } from '../types/issue';
 import { SCSSSelectorObj } from '../types/scss';
-//inport rules
 import appearanceRules from './ruleCategories/appearanceRules';
 import contrastRules from './ruleCategories/contrastRules';
 import keyboardRules from './ruleCategories/keyboardRules';
