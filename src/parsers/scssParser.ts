@@ -19,22 +19,18 @@ export function parseSCSS(code: string, filePath: string): Issue[] {
     const declarations: SCSSDeclarations = {};
     rule.walkDecls((decl) => {
       if (!decl.prop.startsWith('$')) {
+        let resolvedValue = decl.value;
+  
+        if (resolvedValue.startsWith('$') && resolvedValue in variables) {
+          resolvedValue = variables[resolvedValue]; // replace with actual value
+        }
         declarations[decl.prop] = {
-          value: decl.value,
+          value: resolvedValue,
           startLine: decl.source!.start!.line,
           startColumn: decl.source!.start!.column,
           endLine: decl.source!.end!.line,
           endColumn: decl.source!.end!.column,
         };
-      }
-      if (decl.prop.startsWith('$') && decl.value in variables) {
-        declarations[decl.prop] = {
-          value: variables[decl.value],
-          startLine: decl.source!.start!.line,
-          startColumn: decl.source!.start!.column,
-          endLine: decl.source!.end!.line,
-          endColumn: decl.source!.end!.column,
-        }
       }
     });
 
@@ -46,5 +42,7 @@ export function parseSCSS(code: string, filePath: string): Issue[] {
       declarations,
     };
   });
+  console.log('Variables: ', variables);
+  console.log('SCSS selectors: ', selectors);
   return SCSSRulesFromObject(selectors, filePath);
 }
