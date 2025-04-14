@@ -1,4 +1,4 @@
-import { cssRulesFromObject } from '../rules/cssRules';
+import { SCSSRulesFromObject } from '../rules/scssRules';
 import { Issue } from '../types/issue';
 import { SCSSDeclarations, SCSSSelectorObj, Variable } from '../types/scss';
 import postcss from 'postcss';
@@ -27,7 +27,17 @@ export function parseSCSS(code: string, filePath: string): Issue[] {
           endColumn: decl.source!.end!.column,
         };
       }
+      if (decl.prop.startsWith('$') && decl.value in variables) {
+        declarations[decl.prop] = {
+          value: variables[decl.value],
+          startLine: decl.source!.start!.line,
+          startColumn: decl.source!.start!.column,
+          endLine: decl.source!.end!.line,
+          endColumn: decl.source!.end!.column,
+        }
+      }
     });
+
     selectors[rule.selector] = {
       startLine: rule.source!.start!.line,
       startColumn: rule.source!.start!.column,
@@ -36,5 +46,5 @@ export function parseSCSS(code: string, filePath: string): Issue[] {
       declarations,
     };
   });
-  return cssRulesFromObject(selectors, filePath);
+  return SCSSRulesFromObject(selectors, filePath);
 }
