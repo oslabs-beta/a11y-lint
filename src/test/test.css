@@ -15,8 +15,8 @@
 }
 
 body {
-  font-size: 7px;
-  color: rgb(255, 1, 1);
+  font-size: 7rem;
+  color: rgb(1, 1, 1);
   background-color: rgb(198, 203, 186);
 }
 
@@ -25,31 +25,34 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+ 
+a:focus {
+  font-size: 1rem;
+  outline: 1px;
+}
 
 img {
   width: 100px;
 }
 
-
 button {
-  font-size: 9px;
+  border: 2px;
+  font-size: 1rem;
 }
 
-button:focus {
-  border: 5px;
-}
 
 .fancy-button {
-  font-size: 9px;
+  font-size: 9rem;
 }
-
 
 #demoLink {
   padding-left: 1px;
   padding-right: 10px;
   color: black;
   text-decoration: underline;
+  font-size: 16px;
 }
+
 .download {
   display: flex;
   align-items: center;

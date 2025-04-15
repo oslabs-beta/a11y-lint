@@ -50,6 +50,7 @@ export function mediaRules(elements: HtmlExtractedNode[]): Issue[] {
         severity: 'error'
       });
     }
+    
 
     // Rule 4: video must be pausable
     if (el.type === 'video' && !el.attributes?.['controls']) {
