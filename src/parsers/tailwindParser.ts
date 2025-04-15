@@ -1,32 +1,19 @@
 import { CssSelectorObj } from "../types/css";
 import { Issue } from "../types/issue";
 import { Location } from "../types/jsx";
-import { convert } from "@jyotirmay/tailwind-to-css";
-import { isValidTailwindClass } from'@jyotirmay/tailwind-class-validator';
+import { convert } from "./converter.js";
 import { addClassTagPair } from "../core/dependencyGraph";
 import { cssRulesFromObject } from "../rules/cssRules";
 import postcss from 'postcss';
 
 //add back in: parentNodeTag: string, location: Location,
 export async function tailwindParser(code: string, parentNodeTag: string, location: Location, issues: Issue[]): Promise<Issue[]> {
-  const inputCode = `<div class="${code}">`
-  console.log('same? ', code === 'relative');
-  isValidTailwindClass(code).then((response)=>{
-    console.log('is code valid tailwind class? ', response);
-  })
-
-  isValidTailwindClass('relative').then((response)=>{
-    console.log('QA test? ', response);
-  })
-
-  // const twToCSS = await convert(code);
-  convert(String(inputCode.trim())).then(response=> {  console.log('here is what that should output: ', response)})
   const results: CssSelectorObj = {}
-  convert(inputCode).then((response)=>{
+  convert(code).then((response)=>{
     const twToCSS = response;
     console.log('twToCSS code! ', twToCSS);
     const root = postcss.parse(twToCSS.css);
-    const splitCode = inputCode.split(' ');
+    const splitCode = code.split(' ');
     //get the lengths of each TW declaration for linting
     const values: number[] = [];
     for (let i = 1; i<splitCode.length;i++){
@@ -39,7 +26,7 @@ export async function tailwindParser(code: string, parentNodeTag: string, locati
         else{
             values[i] = splitCode[i].length;
         }
-    }
+    } 
 
 root.walkRules((rule) => {
     //selecting the spefici tag so I can set it equal to th key of the object

@@ -91,6 +91,7 @@
     "@babel/parser": "^7.27.0",
     "@babel/traverse": "^7.27.0",
     "@jyotirmay/tailwind-to-css": "^0.0.3",
+    "@tailwindcss/postcss": "^4.1.4",
     "@types/tinycolor2": "^1.4.6",
     "parse5": "^7.2.1",
     "postcss": "^8.5.3",

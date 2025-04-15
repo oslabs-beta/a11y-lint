@@ -6,7 +6,8 @@ import { HtmlExtractedNode } from '../types/html';
 import { Declarations, CssSelectorObj } from '../types/css';
 import { addSelectorUsage, addDependency, addClassTagPair } from '../core/dependencyGraph';
 import { isTailwind } from '../core/dependencyGraph';
-import { tailwindParser } from '../parsers/tailwindParser';
+import { tailwindParser } from './tailwindParser';
+// import { tailwindParser } from '../../../research/tailwindParser';
 import path from 'path';
 // -----------------------------
 // Parses HTML string, extracts elements, applies rules
