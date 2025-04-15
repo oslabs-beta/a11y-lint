@@ -60,6 +60,7 @@ keyboardRules.checkVisibleFocusStyle = (
 
 keyboardRules.checkMissingFocusStyles = (
   selector: string,
+  testSelector: string,
   selectorBlock: SelectorBlock,
   issues: Issue[],
   objValues: string[]
@@ -78,7 +79,7 @@ keyboardRules.checkMissingFocusStyles = (
 
   const baseSelector = selector.trim();
   const isInteractable = {button: true, a: true, input: true, summary: true, textarea: true, select: true}
-  if (!focusSelectors[baseSelector] && isInteractable.hasOwnProperty(baseSelector)) {
+  if (!focusSelectors[baseSelector] && isInteractable.hasOwnProperty(testSelector)) {
     issues.push({
       line: selectorBlock.startLine,
       column: selectorBlock.startColumn,

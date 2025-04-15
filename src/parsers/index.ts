@@ -16,7 +16,9 @@ export function parseByType(code: string, filePath: string) {
   }
   if (filePath.endsWith('.html')) {
     console.log('➡️ Routing to parseHTML');
+    //createParentChildObj(code, filePath);
     return parseHTML(code, filePath);
+
   }
   if (filePath.endsWith('.css')) {
     console.log('➡️ Routing to parseCSS');

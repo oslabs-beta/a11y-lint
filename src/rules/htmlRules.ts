@@ -30,7 +30,7 @@ export function htmlRules(
     for (const ruleKey in allRules) {
       const ruleFn = allRules[ruleKey];
       const issue = ruleFn(node);
-      console.log(allRules);
+      //console.log(allRules);
       if (issue) {
         issues.push(issue);
       }
@@ -113,15 +113,12 @@ export function htmlRules(
   }
   for (let i = 0; i < nodes.length; i++) {
   //   //want to test all nodes for links EXCEPT <a> tags
-  console.log("testing current node: ", nodes[i]);
     if (nodes[i].type !== 'a') {
       controlRules.useATag(nodes[i], issues);
     }
   //   //run in-line styling through CSS parser
     if (nodes[i].styles) {
-      console.log('styles attribute info: ', nodes[i].styles);
       cssRulesFromObject(nodes[i].styles!, '', issues);
-      console.log('issues after running CSS rules: ', issues);
     }
   //   //want to check for potential list structures
     if (nodes[i].value) {

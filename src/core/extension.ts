@@ -43,11 +43,16 @@ function extractCssSelectors(code: string): string[] {
 //here we are going to lint every file so we get all of our dependencies mapped out
 //this way we dont have to save a file in a correct order to get the maps
 async function preloadAllFiles(diagnostics: vscode.DiagnosticCollection) {
-  //vscode method that creates and array or objects that finds files with the following file types
+  const folder = vscode.workspace.workspaceFolders?.[0];
+  if (!folder) {
+    return;
+  }
+
   const files = await vscode.workspace.findFiles(
-    '**/*.{js,jsx,ts,tsx,html,css}',
+    new vscode.RelativePattern(folder, '**/*.{js,jsx,ts,tsx,html,css}'),
     '**/node_modules/**'
   );
+
   //console.log(`🗂 Preloading ${files.length} files...`);
   //iterate through the the array of files
   for (const file of files) {
@@ -98,18 +103,12 @@ export async function activate(context: vscode.ExtensionContext) {
       //! at some point we need to work on the nested components and stuff
       // if its a CSS file relint all files using its selectors
       if (filePath.endsWith('.css')) {
-        //code is going to be equal to a string of all the code in the .css file
         const code = fs.readFileSync(filePath, 'utf-8');
-        //selectors are equal to the invokation of the extract function passing in the .css file string,  this will return an array of string types
-        //* BELOW FUNCTION CNA BE FOUND ON LINE 18
         const selectors = extractCssSelectors(code);
         //console.log('🎯 Extracted selectors:', selectors);
-        //iterate over each element in the array
+
         for (const selector of selectors) {
-          //* BELOW FUNCTION CAN BE FOUND ON LINE 108 IN DEPENDECYGRAPH.TS FILE
-          //will be an object that has all the files that use the passed in selector
           const files = getFilesForSelector(selector);
-          //for each file this will add them to the allToLint set to be linted
           files.forEach((f) => allToLint.add(f));
         }
       }
@@ -136,4 +135,3 @@ export async function activate(context: vscode.ExtensionContext) {
 
   console.log('🥶 A11yLint is now active');
 }
-

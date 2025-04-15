@@ -38,9 +38,9 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
   rightToLeftLang: (node) => {
     // console.log("RT fucntion reached");
     if (node.type === 'html' && (node.attributes.lang.value === "ar" || node.attributes.lang.value === "he")) {
-       console.log("first if statement", );
+       //console.log("first if statement", );
       if(!node.attributes.dir || node.attributes.dir.value !== "rtl") {
-        console.log("second if statement");
+       //console.log("second if statement");
         return {
           line: node.location?.startLine || 0,
           column: node.location?.startColumn,

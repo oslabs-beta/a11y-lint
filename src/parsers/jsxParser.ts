@@ -10,7 +10,7 @@ import { Node } from '../types/jsx';
 import { jsxRules } from '../rules/jsxRules';
 import { Issue } from '../types/issue';
 import { Declarations } from '../types/css';
-import { addSelectorUsage, addDependency } from '../core/dependencyGraph';
+import { addSelectorUsage, addDependency, addClassTagPair } from '../core/dependencyGraph';
 import * as nodePath from 'path';
 
 
@@ -33,9 +33,11 @@ export function parseJSX(code: string, filePath: string): Issue[] {
           if (name === 'className') {
             value.split(/\s+/).forEach((cls) => {
               addSelectorUsage(`.${cls}`, filePath);
+              addClassTagPair(`.${cls}`, String(results[results.length - 1].type));
             });
           } else if (name === 'id') {
             addSelectorUsage(`#${value}`, filePath);
+            addClassTagPair(`#${value}`, String(results[results.length - 1].type));
           }
 
           if (name !== 'style') {

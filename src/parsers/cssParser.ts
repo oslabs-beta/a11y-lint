@@ -8,7 +8,10 @@ import postcss from 'postcss';
 import { CssSelectorObj } from '../types/css';
 import { cssRulesFromObject } from '../rules/cssRules';
 import { Issue } from '../types/issue';
-import { registerSelectorDeclarations } from '../core/dependencyGraph';
+import {
+  registerSelectorDeclarations,
+  addSelectorDefinition,
+} from '../core/dependencyGraph';
 import { splitSelector } from '../core/splitSelector';
 
 export function parseCSS(code: string, filePath: string): Issue[] {
@@ -36,6 +39,7 @@ export function parseCSS(code: string, filePath: string): Issue[] {
       const parts = splitSelector(selector);
       for (const part of parts) {
         registerSelectorDeclarations(part, outputObj[selector]);
+        addSelectorDefinition(part, filePath);
       }
     }
     //console.log(outputObj)
