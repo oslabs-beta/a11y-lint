@@ -55,6 +55,6 @@ export function parseCSS(code: string, filePath: string): Issue[] {
       };
     });
   });
-  console.log('output:', outputObj);
+  //console.log('output:', outputObj);
   return cssRulesFromObject(outputObj, filePath);
 }

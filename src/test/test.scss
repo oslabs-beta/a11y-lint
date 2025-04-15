@@ -1,0 +1,17 @@
+$primary: #333;
+
+$back-ground: blue;
+
+.button {
+  color: $primary;
+  padding: 1rem;
+
+  &:hover {
+    color: lighten($primary, 10%);
+  }
+}
+
+.a{
+  color: red;
+  background-color: $back-ground;
+}

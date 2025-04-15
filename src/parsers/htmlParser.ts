@@ -10,7 +10,7 @@ import path from 'path';
 // -----------------------------
 export function parseHTML(code: string, filePath: string): Issue[] {
   const document = parse(code, { sourceCodeLocationInfo: true });
-  console.log('HTML docuemnt: ', document);
+  //console.log('HTML docuemnt: ', document);
   const extractElements = (
     node: any,
     output: HtmlExtractedNode[] = []
@@ -141,7 +141,7 @@ export function parseHTML(code: string, filePath: string): Issue[] {
   };
 
   const htmlElements = extractElements(document);
-  console.log('HTML Elements ', htmlElements);
+  //console.log('HTML Elements ', htmlElements);
   return htmlRules(htmlElements, filePath);
 }
 
