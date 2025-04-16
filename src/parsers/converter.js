@@ -18,7 +18,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const configPath = resolve(__dirname, '../../tailwind.config.js');
 
-export function convert(code){
+export async function convert(code){
 const css = `.cls{@apply ${code}}`;
 // Convert Tailwind CSS to native CSS
 postcss([ 
