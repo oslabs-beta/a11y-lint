@@ -73,9 +73,6 @@ async function preloadAllFiles(diagnostics: vscode.DiagnosticCollection) {
 }
 
 export async function activate(context: vscode.ExtensionContext) {
-  //message to let us know the lionter has spun up
-  vscode.window.showInformationMessage('🔥 A11YLint activated!');
-
   const diagnostics = vscode.languages.createDiagnosticCollection('a11ylint');
   //fucntion referenced on line 45 preloading of all files
   await preloadAllFiles(diagnostics);
@@ -117,7 +114,6 @@ export async function activate(context: vscode.ExtensionContext) {
       //iterate over each file in tthe allToLint Set
       for (const file of allToLint) {
         try {
-          console.log(`🚨 Linting file: ${file}`);
           //define issues as invocartion of lintDocument on eahc file
           //* BELOW FUNCTION CAN BE FOUND ON LINE 12 OF LINTER.TS FILE
           const issues = lintDocument(file);
@@ -132,6 +128,4 @@ export async function activate(context: vscode.ExtensionContext) {
       }
     })
   );
-
-  console.log('🥶 A11yLint is now active');
 }

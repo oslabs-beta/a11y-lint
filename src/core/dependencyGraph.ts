@@ -44,21 +44,6 @@ export function getAllDependents(targetFile: string): Set<string> {
   return result;
 }
 
-//! IS THIS FUNCTION BEING USED?
-export function getDependencies(filePath: string): Set<string> {
-  const normalizedPath = path.resolve(filePath);
-  const result = new Set<string>();
-
-  for (const [dependency, dependents] of dependencyGraph.entries()) {
-    if (dependents.has(normalizedPath)) {
-      result.add(dependency);
-    }
-  }
-
-  return result;
-}
-
-//! IS THIS FUNCTION BEING USED?
 // logs whole dependencyGraph
 export function logDependencyGraph() {
   console.log('🚀 A11Y Dependency Graph:\n');
@@ -67,7 +52,6 @@ export function logDependencyGraph() {
     console.log(`${dependency} is depended on by:\n${fromFiles}\n`);
   }
 }
-
 
 //Class-Tag Graph
 //tracks which HTML tags classes/IDs are associated with
@@ -93,7 +77,6 @@ export function getClassTagPair(className: string): string | undefined{
 const selectorGraph = new Map<string, Set<string>>();
 
 
-//! IS THIS FUNCTION BEING USED?
 /*
  * Track where a id or class is used
  * selector - CSS selector
@@ -109,7 +92,6 @@ export function addSelectorUsage(selector: string, filePath: string) {
   selectorGraph.get(selector)!.add(file);
 }
 
-//! IS THIS FUNCTION BEING USED?
 /*
  * Track where a selector is defined
  * selector - CSS selector

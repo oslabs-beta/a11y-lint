@@ -10,7 +10,6 @@ import path from 'path';
 // -----------------------------
 export function parseHTML(code: string, filePath: string): Issue[] {
   const document = parse(code, { sourceCodeLocationInfo: true });
-  //console.log('HTML docuemnt: ', document);
   const extractElements = (
     node: any,
     output: HtmlExtractedNode[] = []
@@ -35,7 +34,6 @@ export function parseHTML(code: string, filePath: string): Issue[] {
       if (Array.isArray(node.attrs)) {
         for (const attr of node.attrs) {
           //tracking css selectors
-          //tracking css selectors
           if (attr.name === 'class') {
             const classNames = attr.value.split(/\s+/); //in case multiple
             classNames.forEach((cls: any) => {
@@ -59,7 +57,6 @@ export function parseHTML(code: string, filePath: string): Issue[] {
             const selector = node.tagName;
             const selectorLocation = node.sourceCodeLocation;
             const location = node.sourceCodeLocation?.attrs['style'];
-            console.log('style declarations locations: ', location);
             for (let i = 0; i < values.length - 1; i++) {
               const decPair: string[] = values[i].trim().split(':');
               const addLineEnd: number = decPair[0].length + decPair[1].length;
@@ -141,46 +138,6 @@ export function parseHTML(code: string, filePath: string): Issue[] {
   };
 
   const htmlElements = extractElements(document);
-  //console.log('HTML Elements ', htmlElements);
   return htmlRules(htmlElements, filePath);
 }
-
-// type outputObj = {
-//   [key: string]: string[];
-// };
-// export function createParentChildObj(code: string, filePath: string) {
-//   const document = parse(code, { sourceCodeLocationInfo: true });
-//   const outputObj: outputObj = {};
-
-//   function traverse(node: MyTreeNode, parentKey: string | null) {
-//     let currentKey: string;
-//     if ('tagName' in node && node.tagName) {
-//       // Use tagName + source code location to make key more unique
-//       const location = node.sourceCodeLocation?.startLine ?? 0;
-//       currentKey = `<${node.tagName}>`;
-//     } else {
-//       currentKey = node.nodeName;
-//     }
-
-//     if (parentKey) {
-//       if (!outputObj[parentKey]) {
-//         outputObj[parentKey] = [];
-//       }
-//       outputObj[parentKey].push(currentKey);
-//     }
-
-//     if ('childNodes' in node && node.childNodes) {
-//       for (const child of node.childNodes) {
-//         traverse(child, currentKey);
-//       }
-//     }
-//     if (document.childNodes) {
-//       for (const child of document.childNodes) {
-//         traverse(child, "ROOT");
-//       }
-//     }
-//   }
-//   console.log('ParentChild Object: ', outputObj);
-//   return outputObj;
-// }
 

@@ -11,10 +11,8 @@ contrastRules.checkContrast = (
 ) => {
   //checking to see if there is an attribute of color and background color if there is there will eb contrast
   if (declarations['color'] && declarations['background-color']) {
-    //console.log('you are in contrast if statement 🍣');
     //converting color equal to rbg/hex using tinycolor
     let color = tinycolor(declarations['color'].value);
-    //console.log(color);
     //converting color equal to rbg/hex using tinycolor
     const backgroundColor = tinycolor(declarations['background-color'].value);
     //invoking tiny color method isReadabel.  This tests if the contrast between color and background color is above a 4.5
@@ -44,7 +42,6 @@ contrastRules.checkButtonBorder = (
   selectorBlock: SelectorBlock,
   issues: Issue[]
 ) => {
-  //console.log('button start line: ', parsedCSS['button'].startLine);
   if (selector === 'button') {
     if (!selectorBlock.declarations.border) {
       issues.push({

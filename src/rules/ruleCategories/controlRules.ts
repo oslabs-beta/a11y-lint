@@ -39,7 +39,6 @@ controlRules.useATag = (parsedJsx: Node, issues: Issue[]): Issue[] => {
         parsedJsx.type !== 'img' ||
         (parsedJsx.type === 'img' && obj !== 'src')
       ) {
-        console.log(parsedJsx.type);
         if (parsedJsx.attributes[obj].value.match(regex)) {
           {
             issues.push({

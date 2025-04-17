@@ -105,9 +105,6 @@ export function htmlRules(
       issue.endLine = match.location.endLine || 0;
       issue.endColumn = match.location.endColumn;
     }
-    // console.log(
-    //   `🎯 Matched selector "${issue.selector}" to HTML tag <${match?.type}> at line ${issue.line}`
-    // );
 
     issues.push(issue);
   }

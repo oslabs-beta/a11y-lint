@@ -3,7 +3,6 @@
 // DESCRIPTION: Uses PostCSS to parse CSS files and applies CSS-specific rules.
 // -----------------------------
 
-import * as vscode from 'vscode';
 import postcss from 'postcss';
 import { CssSelectorObj } from '../types/css';
 import { cssRulesFromObject } from '../rules/cssRules';
@@ -22,9 +21,8 @@ export function parseCSS(code: string, filePath: string): Issue[] {
 
   //method walk Rules is built in method of postcss.  walk Rules in AST esetially goes to each node of a certain type which is "rules" and in this case rules are each tag (i.e. <button> <h1> <div>)
   root.walkRules((rule) => {
-    //selecting the spefici tag so I can set it equal to th key of the object
+    //selecting the specific tag so I can set it equal to the key of the object
     const selector = rule.selector;
-    // console.log(selector)
     //checking if the tag already exists in the object.  If it doesn't add it set it equal to a key with the value as an empty object
     if (!outputObj[selector]) {
       outputObj[selector] = {
@@ -42,7 +40,6 @@ export function parseCSS(code: string, filePath: string): Issue[] {
         addSelectorDefinition(part, filePath);
       }
     }
-    //console.log(outputObj)
     //walkDecls is a method of postCSS that goes through each Declaration (attribute)
     rule.walkDecls((decl) => {
       //setting the key equal to the prop and the values are all the info we want
@@ -55,6 +52,5 @@ export function parseCSS(code: string, filePath: string): Issue[] {
       };
     });
   });
-  //console.log('output:', outputObj);
   return cssRulesFromObject(outputObj, filePath);
 }

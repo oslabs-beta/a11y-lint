@@ -6,7 +6,6 @@ import scss from 'postcss-scss';
 
 export function parseSCSS(code: string, filePath: string): Issue[] {
   const root = scss.parse(code, { from: filePath });
-  console.log('SCSS root Object: ', root);
   const variables: Variable = {};
   const selectors: SCSSSelectorObj = {};
   root.walkDecls((decl) => {
@@ -42,7 +41,5 @@ export function parseSCSS(code: string, filePath: string): Issue[] {
       declarations,
     };
   });
-  console.log('Variables: ', variables);
-  console.log('SCSS selectors: ', selectors);
   return SCSSRulesFromObject(selectors, filePath);
 }

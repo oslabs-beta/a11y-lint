@@ -21,7 +21,6 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
   //************ Test image tag for missing alt attribute ****************/
   missingUniqueTitle: (node) => {
     if (node.type === 'title' && (!node.value || node.value.trim() === '')) {
-      //console.log(node.value);
       return {
         line: node.location?.startLine || 0,
         column: node.location?.startColumn,
@@ -36,11 +35,8 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
   // //************ Test html tag for missing RTF attribute if lang is RTF lang ****************/
   // //************ Test html tag for missing RTF attribute if lang is RTF lang ****************/
   rightToLeftLang: (node) => {
-    // console.log("RT fucntion reached");
     if (node.type === 'html' && (node.attributes.lang.value === "ar" || node.attributes.lang.value === "he")) {
-       //console.log("first if statement", );
       if(!node.attributes.dir || node.attributes.dir.value !== "rtl") {
-       //console.log("second if statement");
         return {
           line: node.location?.startLine || 0,
           column: node.location?.startColumn,
@@ -56,23 +52,6 @@ const globalCodeRules: { [key: string]: RuleFunction } = {
   },
 
 
-
-  //************ Test image tag for missing alt attribute ****************/
-  
-  //running test from imageRules.ts instead!
-  // missingAltAttr: (node) => {
-  //   if (node.type === 'img' && !node.attributes['alt']) {
-  //     return {
-  //       line: node.location?.startLine || 0,
-  //       column: node.location?.startColumn,
-  //       endline: node.location?.endLine || 0,
-  //       endColumn: node.location?.endColumn,
-  //       message: '<img> tag is missing an "alt" attribute. See WCAG 1.1.1: https://www.w3.org/WAI/WCAG21/Understanding/non-text-content.html',
-  //       severity: 'error',
-  //     };
-  //   }
-  //   return null;
-  // },
   avoidAutofocus: (node) => {
     if (node.attributes['autofocus'] || node.attributes['autoFocus']) {
       return {

@@ -11,7 +11,6 @@ import { Issue } from '../types/issue';
 //Extracts the text from file and picks a parser to use based off file type
 export function lintDocument(filePath: string): Issue[] {
   //console.log(`🚨 Linting file: ${filePath}`);
-
   console.log('lintDocument function reached 🗿');
   //turns file isto one big string
   const code = fs.readFileSync(filePath, 'utf-8');
