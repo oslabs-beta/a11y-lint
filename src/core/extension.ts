@@ -49,7 +49,7 @@ async function preloadAllFiles(diagnostics: vscode.DiagnosticCollection) {
   }
 
   const files = await vscode.workspace.findFiles(
-    new vscode.RelativePattern(folder, '**/*.{js,jsx,ts,tsx,html,css}'),
+    new vscode.RelativePattern(folder, '**/*.{js,jsx,ts,tsx,html,css,scss}'),
     '**/node_modules/**'
   );
 
@@ -99,7 +99,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
       //! at some point we need to work on the nested components and stuff
       // if its a CSS file relint all files using its selectors
-      if (filePath.endsWith('.css')) {
+      if (filePath.endsWith('.css') || filePath.endsWith('.scss')) {
         const code = fs.readFileSync(filePath, 'utf-8');
         const selectors = extractCssSelectors(code);
         //console.log('🎯 Extracted selectors:', selectors);
